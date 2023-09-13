@@ -1,0 +1,65 @@
+(() => {
+  const code = document.querySelector('#_описание~div code').textContent
+
+  const body = [...document.querySelectorAll('#_параметры~.sectionbody table tbody tr')].map(el => ({
+    name: el.querySelector('td:nth-child(1)').textContent.trim(),
+    type: el.querySelector('td:nth-child(2)').textContent.trim(),
+    default: el.querySelector('td:nth-child(3)').textContent.trim(),
+    desc: el.querySelector('td:nth-child(4)').textContent.trim().replace(/\n\s*\n/g, "\n"),
+
+  })).filter(item => item.name != 'name').map(item => {
+    const require = item.default.indexOf('required') > -1
+    const requireStr = require ? '' : '?'
+
+    const defaultStr = item.default.replaceAll(/required/mg, "").trim()
+
+    const types = ({ name, type }) => {
+      if (name == 'roletype') { return `"${code}"` }
+      if (['aliases', 'termportranges'].indexOf(name) != -1) { return `{key:string, value:string}[]` }
+      return { str: 'string', bool: 'boolean', int: 'number', ['array<str>']: 'string[]' }[type]
+    }
+
+    const constraints = (item) => {
+      const min = item.desc.match(/Минимальное значение:\s*(\d+)./)
+      const integ = item.desc.match(/Целое число от (\d+) до (\d+)/)
+      const spec = [
+        min ? `minimum ${min[1]}` : false,
+        ...(integ ? ['integer', `minimum ${integ[1]}`, `maximum ${integ[2]}`] : []),
+
+      ]
+      const def = {
+        roleid: ['minimum 1', 'maximum 9999', 'uniqueItems'], tcp: ['integer'], udp: ['integer'], port: ['integer'],
+        _group: ['integer', 'minimum 1', 'maximum 9999999']
+      }[item.name]
+
+      return [...new Set([...[def].flat(), ...[spec].flat()].filter(item => item))]
+    }
+
+    return `
+    /** 
+ *\`\`\`
+${item.desc.replaceAll(/^/gm, ' * ')} 
+ *\`\`\`
+ ${defaultStr ? "* default: " + defaultStr : ''}
+${constraints(item) ? constraints(item).map(con => ` *  @TJS-${con}`).join('\n') : ''}
+ */
+    ${item.name}${requireStr}:${types(item)}
+    `.trim().replace(/^\s*[*]?\s*[\r\n]/gm, '')
+
+
+  }).join('\n\n')
+
+  return (`import { IOSConfigRoleBasic } from "../interfaces_os-config";
+  
+    /**
+    * ${document.querySelector('.doc>h1').textContent}
+    * \`\`\`
+${document.querySelector('#_описание~div>.paragraph').textContent.trim().replaceAll(/^/gm, ' * ')}
+    * \`\`\`
+    * ${window.location.href}
+    */
+export interface IOSConfigRole${code[0].toUpperCase() + code.slice(1)} extends IOSConfigRoleBasic {
+${body}
+  
+  }`)
+})()

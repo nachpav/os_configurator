@@ -1,0 +1,59 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+table {
+  border-collapse: collapse;
+}
+
+main {
+  width: 100vw;
+  height: 100vh;
+  background-color: aquamarine;
+  display: grid;
+  grid-template-columns: 1fr;
+
+  padding: 1em
+}
+
+.source #sourceJSON {
+  width: 95%;
+  height: 80%;
+}
+
+.os-site {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.3em;
+
+  border: 1px solid black;
+}
+
+.os-header {
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.9em;
+
+  border: 1px solid black;
+}
+
+.os-header-mid {
+  text-align: center;
+  font-size: 0.9em;
+
+  border: 1px solid black;
+}
+
+#targetTableContainer table tr > td:nth-child(5n + 1) {
+  max-width: 5em;
+}
+
+#targetTableContainer table tr > td:nth-child(5n + 2),
+#targetTableContainer table tr > td:nth-child(5n + 3),
+#targetTableContainer table tr > td:nth-child(5n + 4),
+#targetTableContainer table tr > td:nth-child(5n + 5) {
+  max-width: 5em;
+}
