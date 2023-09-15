@@ -30,7 +30,7 @@
       import { renderTable, renderLost, renderEmpty } from '../dist/index.js'
 
       const textArea = document.getElementById('sourceJSON')
-      const fetchPromise = fetch('./test.json')
+      const fetchPromise = fetch('./config.json')
         .then((response) => response.text())
         .catch((error) => console.error(error))
 
