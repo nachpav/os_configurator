@@ -2,9 +2,11 @@ import { IOSConfig, IOSConfigSite } from "./osconfig/interfaces_os-config"
 import { TypeRoleGroup, roleGroups } from "./osconfig/osconfig-group.js"
 
 const COLUMNS_COUNT = 5
-const CSS_SITE_CLASS = 'os-site'
-const CSS_HEADER_CLASS = 'os-header'
-const CSS_HEADER_MID_CLASS = 'os-header-mid'
+const CSS_SITE_CLASS = 'os-table-caption-site'
+const CSS_HEADER_CLASS = 'os-table-header'
+const CSS_HEADER_MID_CLASS = 'os-table-header-midle'
+const CSS_BODY_CLASS = 'os-table-body'
+const CSS_SERVER_INFO = 'os-table-server-info'
 
 const createContext = (config: IOSConfig) => {
   const content = config.content
@@ -19,6 +21,10 @@ const createContext = (config: IOSConfig) => {
 
   const getRoleByName = (roleName: string) => {
     return content.roles.find(role => role.name == roleName)
+  }
+
+  const getServerByName = (serverName: string) => {
+    return content.servers.find(server => server.name == serverName)
   }
 
   const getLostRoles = () => {
@@ -44,6 +50,7 @@ const createContext = (config: IOSConfig) => {
     getServersBySite,
     getServerRolesByName,
     getRoleByName,
+    getServerByName,
     getLostRoles,
     getEmptyRoles
   }
@@ -54,7 +61,7 @@ type TypeContext = ReturnType<typeof createContext>
 const renederSites = (context: TypeContext) => {
   return context.sitesWithSrv.map(siteSrv => {
     const cell = document.createElement('td') as HTMLTableCellElement
-    cell.colSpan = 5
+    cell.colSpan = COLUMNS_COUNT
     cell.classList.add(CSS_SITE_CLASS)
     cell.textContent = siteSrv.siteName + "-" + siteSrv.srvName
     return cell
@@ -69,17 +76,6 @@ const renederHeader1 = (context: TypeContext) => {
       const cell = document.createElement('td') as HTMLTableCellElement
       cell.classList.add(CSS_HEADER_CLASS)
       cell.textContent = header
-      return cell
-    })
-  }).flat()
-}
-
-const renederHeader2 = (context: TypeContext) => {
-  return context.sitesWithSrv.map(siteSrv => {
-    return headers.map((header) => {
-      const cell = document.createElement('td') as HTMLTableCellElement
-      cell.classList.add(CSS_HEADER_CLASS)
-      cell.innerHTML = '&nbsp;'
       return cell
     })
   }).flat()
@@ -115,11 +111,13 @@ const renederBodyGroup = (context: TypeContext, group?: TypeRoleGroup) => {
   const headerRow = (() => {// добавляем заголовок 
     const row = document.createElement('tr') as HTMLTableRowElement
 
+    row.title = !group ? 'Роли без группы' : ''
+
     serverRoles.forEach(roles => {
       const cellHeader = row.insertCell()
-      cellHeader.colSpan = 5
+      cellHeader.colSpan = COLUMNS_COUNT
       cellHeader.classList.add(CSS_HEADER_MID_CLASS)
-      cellHeader.innerText = (gg ? gg.caption : ' {-} ') + '-' + roles.siteSrv.srvName
+      cellHeader.innerText = (gg ? gg.caption : 'Иное') + ' - ' + roles.siteSrv.srvName
     })
     return row
   })()
@@ -131,23 +129,24 @@ const renederBodyGroup = (context: TypeContext, group?: TypeRoleGroup) => {
       const rr = roles.rolesGG[i]
 
       const cell1 = row.insertCell()
-      cell1.classList.add(CSS_HEADER_CLASS)
+      cell1.classList.add(CSS_BODY_CLASS)
       cell1.innerHTML = rr ? rr.name : '&nbsp;'
+      cell1.title = JSON.stringify(rr, null, 2)
 
       const cell2 = row.insertCell()
-      cell2.classList.add(CSS_HEADER_CLASS)
+      cell2.classList.add(CSS_BODY_CLASS)
       cell2.innerHTML = (rr && 'group' in rr) ? '' + rr['group'] : '&nbsp;'
 
       const cell3 = row.insertCell()
-      cell3.classList.add(CSS_HEADER_CLASS)
+      cell3.classList.add(CSS_BODY_CLASS)
       cell3.innerHTML = (rr && 'order' in rr) ? '' + rr['order'] : '&nbsp;'
 
       const cell4 = row.insertCell()
-      cell4.classList.add(CSS_HEADER_CLASS)
+      cell4.classList.add(CSS_BODY_CLASS)
       cell4.innerHTML = (rr && 'roleid' in rr) ? '' + rr['roleid'] : '&nbsp;'
 
       const cell5 = row.insertCell()
-      cell5.classList.add(CSS_HEADER_CLASS)
+      cell5.classList.add(CSS_BODY_CLASS)
       cell5.innerHTML = (rr && 'mgcgroup' in rr) ? '' + rr['mgcgroup'] : '&nbsp;'
 
       return cell1
@@ -155,6 +154,23 @@ const renederBodyGroup = (context: TypeContext, group?: TypeRoleGroup) => {
     return row
   })
   return [headerRow, ...bodyRows]
+}
+
+const renderServerInfo = (context: TypeContext) => {
+  return context.sitesWithSrv.map(siteSrv => {
+    const cell = document.createElement('td') as HTMLTableCellElement
+    cell.colSpan = COLUMNS_COUNT
+    cell.classList.add(CSS_SERVER_INFO)
+    const server = context.getServerByName(siteSrv.srvName)
+    cell.innerHTML =
+      [
+        (server?.ifaces || []).map(ifrace => `${ifrace.key} - ${ifrace.value}`).join('<br/>'),
+        `Описание:${server?.descr || ''} `.split('\n').join('<br/>')
+      ].join('<br/>')
+
+    cell.title = JSON.stringify(server, null, 2)
+    return cell
+  }).flat()
 }
 
 export const renderTable = (jsonStr: string) => {
@@ -183,6 +199,9 @@ export const renderTable = (jsonStr: string) => {
   table.tBodies[0].append(...renederBodyGroup(context, "add"))
   table.tBodies[0].append(...renederBodyGroup(context))
 
+  const tableRowServerInfo = table.insertRow()
+  tableRowServerInfo.append(...renderServerInfo(context))
+
   return table
 }
 
@@ -207,5 +226,6 @@ export const renderEmpty = (jsonStr: string) => {
   div.innerText = `Всего:${items.length}, - ` + items.join(', ')
   return div
 }
+
 
 

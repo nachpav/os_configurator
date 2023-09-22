@@ -2,21 +2,11 @@
   box-sizing: border-box;
 }
 body {
-  margin: 0;
-  padding: 0;
+  background-color: aquamarine;
 }
+
 table {
   border-collapse: collapse;
-}
-
-main {
-  width: 100vw;
-  height: 100vh;
-  background-color: aquamarine;
-  display: grid;
-  grid-template-columns: 1fr;
-
-  padding: 1em
 }
 
 .source #sourceJSON {
@@ -24,25 +14,48 @@ main {
   height: 80%;
 }
 
-.os-site {
+.os-table-caption-site {
   text-align: center;
   font-weight: bold;
   font-size: 1.3em;
 
   border: 1px solid black;
+
+  position: sticky;
+  top: 1px;
+  background: white;
 }
 
-.os-header {
+.os-table-header {
   text-align: center;
   font-weight: bold;
   font-size: 0.9em;
 
   border: 1px solid black;
+
+  position: sticky;
+  top: 1.7em;
+  background: #fed932;
 }
 
-.os-header-mid {
+.os-table-header-midle {
   text-align: center;
   font-size: 0.9em;
+
+  border: 1px solid black;
+}
+
+.os-table-body {
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.9em;
+  
+  border: 1px solid black;
+}
+
+.os-table-server-info {
+  padding: 0.1em;
+  vertical-align: top;
 
   border: 1px solid black;
 }
