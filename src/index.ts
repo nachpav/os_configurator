@@ -1,3 +1,4 @@
+import { table } from "console"
 import { IOSConfig, IOSConfigSite } from "./osconfig/interfaces_os-config"
 import { TypeRoleGroup, roleGroups } from "./osconfig/osconfig-group.js"
 
@@ -8,6 +9,11 @@ const CSS_HEADER_MID_CLASS = 'os-table-header-midle'
 const CSS_BODY_CLASS = 'os-table-body'
 const CSS_SERVER_INFO = 'os-table-server-info'
 
+/**
+ * 
+ * @param config Конфигурация
+ * @returns вернет основной контекст для конфигурации
+ */
 const createContext = (config: IOSConfig) => {
   const content = config.content
 
@@ -156,6 +162,11 @@ const renederBodyGroup = (context: TypeContext, group?: TypeRoleGroup) => {
   return [headerRow, ...bodyRows]
 }
 
+/**
+ * Выводит основую информацию по серверам
+ * @param context контекст 
+ * @returns 
+ */
 const renderServerInfo = (context: TypeContext) => {
   return context.sitesWithSrv.map(siteSrv => {
     const cell = document.createElement('td') as HTMLTableCellElement
@@ -173,6 +184,45 @@ const renderServerInfo = (context: TypeContext) => {
   }).flat()
 }
 
+
+/**
+ * Выводит список ролей которые описаны ноне добавлены к серверу
+ * @param jsonStr конфиг
+ * @returns 
+ */
+export const renderLost = (jsonStr: string) => {
+  const config = JSON.parse(jsonStr) as IOSConfig
+
+  const context: TypeContext = createContext(config)
+
+  const div = document.createElement('div')
+  const items = context.getLostRoles().map(role => role.name)
+  div.innerText = `Всего:${items.length}, - ` + items.join(', ')
+  return div
+}
+
+/**
+ * Выводит роли которые были добавлены серверу, но роли в описании нет
+ * @param jsonStr кофиг
+ * @returns 
+ */
+export const renderEmpty = (jsonStr: string) => {
+  const config = JSON.parse(jsonStr) as IOSConfig
+
+  const context: TypeContext = createContext(config)
+
+  const div = document.createElement('div')
+  const items = context.getEmptyRoles()
+  div.innerText = `Всего:${items.length}, - ` + items.join(', ')
+  return div
+}
+
+
+/**
+ * Основная фнукция построения таблицы
+ * @param jsonStr конфиг
+ * @returns 
+ */
 export const renderTable = (jsonStr: string) => {
   const config = JSON.parse(jsonStr) as IOSConfig
 
@@ -205,27 +255,117 @@ export const renderTable = (jsonStr: string) => {
   return table
 }
 
-export const renderLost = (jsonStr: string) => {
-  const config = JSON.parse(jsonStr) as IOSConfig
+////////////////////////////////////
+////////////////////////////////////
 
-  const context: TypeContext = createContext(config)
+/**
+ * Выводит всплывающее сообщение 
+ */
+const showMsg = (() => {
+  let msg_timerId: NodeJS.Timeout
+  const SHOWED_ATTR = 'showed'
 
-  const div = document.createElement('div')
-  const items = context.getLostRoles().map(role => role.name)
-  div.innerText = `Всего:${items.length}, - ` + items.join(', ')
-  return div
+  return (text: string, ms = 2000) => {
+    clearTimeout(msg_timerId)
+
+    const msgEl = document.getElementById('popup-msg')
+    if (!msgEl) { return }
+
+    msgEl.setAttribute(SHOWED_ATTR, 'true')
+    msgEl.innerText = text
+
+    msg_timerId = setTimeout(() => msgEl.removeAttribute(SHOWED_ATTR), ms)
+  }
+})()
+
+/**
+ *  Копирование таблицы в виде csv в Буфер обмена
+ */
+export const copyTableToClipboard = () => {
+  const tableEl = document.querySelector('#targetTableContainer>table')
+  if (tableEl == null) {
+    showMsg('Ошибка копирования!')
+    return
+  }
+  // Get the text field
+  const copyText = [...tableEl.querySelectorAll('tr')].map(row => {
+    return [...row.cells]
+      .map(cell => `"${cell.innerText}"${[...new Array(cell.colSpan)].map(item => ',').join('')}`)
+      .map(cellText => cellText.replace(/\r\n|\r/mg, '\n'))
+  }).join('\n')
+
+  // Copy the text inside the text field
+  navigator.clipboard.writeText(copyText);
+  showMsg('Скопировано!')
+}
+{
+  const el = document.getElementById('copy-to-clipboard')
+  if (el) { el.onclick = copyTableToClipboard }
 }
 
-export const renderEmpty = (jsonStr: string) => {
-  const config = JSON.parse(jsonStr) as IOSConfig
+/**
+ * Скачиваем в виде файла Excel
+ */
+export const downloadAsExcel = () => {
+  const tableEl = document.querySelector('#targetTableContainer>table') as HTMLElement
+  if (tableEl == null) {
+    showMsg('Ошибка копирования!')
+    return
+  }
 
-  const context: TypeContext = createContext(config)
+  const dataType = 'application/vnd.ms-excel'
+  const tableHTML = tableEl.outerHTML
+  const fileName = `osconfig_${formatDate(new Date())}.xls`
+  const a = window.document.createElement('a');
+  a.href = `data:${dataType};base64,${base64Str(tableHTML)}`
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 
-  const div = document.createElement('div')
-  const items = context.getEmptyRoles()
-  div.innerText = `Всего:${items.length}, - ` + items.join(', ')
-  return div
+  showMsg('Скачивание XLS...')
+}
+{
+  const el = document.getElementById('download-as-excel')
+  if (el) { el.onclick = downloadAsExcel }
+}
+
+/**
+ * Скачиваем текущий конфик в виде файла с текущей датой
+ */
+export const downloadConfigJson = () => {
+  const textArea = document.querySelector('#sourceJSON') as HTMLTextAreaElement
+  if (textArea == null) {
+    showMsg('Ошибка копирования!')
+    return
+  }
+
+  const dataType = 'application/json'
+  const jsonText = textArea.value
+  console.log(jsonText)
+  const fileName = `osconfig_${formatDate(new Date())}.json`
+  const a = window.document.createElement('a');
+  a.href = `data:${dataType};base64,${base64Str(jsonText)}`
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  showMsg('Скачивание JSON...')
+}
+{
+  const el = document.getElementById('download-as-config-json')
+  if (el) { el.onclick = downloadConfigJson }
 }
 
 
+const base64Str = (str: string) => window.btoa(unescape(encodeURIComponent(str))); //Buffer.from(str, 'utf-8').toString('base64');
 
+const formatDate = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${year}-${month}-${day}_${hours}-${minutes}`;
+}
