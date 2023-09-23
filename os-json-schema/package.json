@@ -1,0 +1,20 @@
+{
+  "name": "ooossa_os_configurator-JSONSchema",
+  "version": "1.0.0",
+  "description": "Generate JSONSchema by typescript, for OS configuration",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "build-schema": "npx typescript-json-schema tsconfig.json  IOSConfig -o .\\public\\os.config.schema.json   --required  --noExtraProps  --refs false",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^20.5.7",
+    "typescript": "^5.2.2",
+    "typescript-json-schema": "^0.60.0"
+  },
+  "devDependencies": {}
+}

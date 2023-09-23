@@ -1,0 +1,1705 @@
+{
+ "$schema": "https://raw.githubusercontent.com/ssateam/os_configurator/main/os-json-schema/public/os.config.schema.json",
+  "content": {
+    "aliases": {
+      "paths": [
+        {
+          "alias": "a",
+          "value": "/var/lib/rostell/files/sslcert"
+        },
+        {
+          "alias": "b",
+          "value": "/var/lib/rostell/files/mgrectemp"
+        },
+        {
+          "alias": "c",
+          "value": "/var/lib/rostell/files/logstorage"
+        },
+        {
+          "alias": "d",
+          "value": "/var/lib/rostell/files/globalshare"
+        },
+        {
+          "alias": "e",
+          "value": "/var/lib/rostell/files/siteshare"
+        },
+        {
+          "alias": "f",
+          "value": "/var/lib/rostell/files/local"
+        },
+        {
+          "alias": "g",
+          "value": "/var/lib/rostell/files/syncfolder"
+        },
+        {
+          "alias": "h",
+          "value": "/var/lib/rostell/files/callrecords"
+        }
+      ],
+      "pgdb_strings": [
+        {
+          "alias": "default_connstring0",
+          "value": "host:10.1.0.2,port:5432,login:rostellpgadmin,pwd:1212,database:postgres"
+        }
+      ]
+    },
+    "domains": [
+      {
+        "descr": "Main Domain",
+        "fqdn": "studio.some",
+        "name": "master_td"
+      },
+      {
+        "descr": "Main Domain",
+        "fqdn": "sip.some.ru",
+        "name": "td_sip"
+      }
+    ],
+    "general": {
+      "generaldomain": "master_td",
+      "master_admin_login": "master_admin",
+      "master_admin_pwd": "Df478Rtyg69x",
+      "version": "3.0"
+    },
+    "roles": [
+      {
+        "group": 0,
+        "iface": "eth0",
+        "name": "mic",
+        "order": 10,
+        "roletype": "mic"
+      },
+      {
+        "dbconnstrings": ["alias://pgdb_strings/default_connstring0"],
+        "group": 101,
+        "iface": "eth0",
+        "name": "mdc1",
+        "order": 10,
+        "roletype": "mdc"
+      },
+      {
+        "group": 201,
+        "iface": "eth0",
+        "name": "sdc21",
+        "order": 10,
+        "roletype": "sdc"
+      },
+      {
+        "group": 201,
+        "iface": "eth0",
+        "name": "sdc22",
+        "order": 20,
+        "roletype": "sdc"
+      },
+      {
+        "group": 102,
+        "iface": "eth0",
+        "name": "ic11",
+        "order": 20,
+        "roletype": "ic"
+      },
+      {
+        "group": 102,
+        "iface": "eth0",
+        "name": "ic12",
+        "order": 10,
+        "roletype": "ic"
+      },
+      {
+        "group": 202,
+        "iface": "eth0",
+        "name": "ic21",
+        "order": 20,
+        "roletype": "ic"
+      },
+      {
+        "group": 202,
+        "iface": "eth0",
+        "name": "ic22",
+        "order": 10,
+        "roletype": "ic"
+      },
+      {
+        "iface": "eth0",
+        "name": "rpco11",
+        "roletype": "rpco"
+      },
+      {
+        "iface": "eth0",
+        "name": "rpco12",
+        "roletype": "rpco"
+      },
+      {
+        "iface": "eth0",
+        "name": "rpco21",
+        "roletype": "rpco"
+      },
+      {
+        "iface": "eth0",
+        "name": "rpco22",
+        "roletype": "rpco"
+      },
+      {
+        "iface": "eth0",
+        "name": "rpci11",
+        "roletype": "rpci"
+      },
+      {
+        "iface": "eth0",
+        "name": "rpci12",
+        "roletype": "rpci"
+      },
+      {
+        "iface": "eth0",
+        "name": "rpci21",
+        "roletype": "rpci"
+      },
+      {
+        "iface": "eth0",
+        "name": "rpci22",
+        "roletype": "rpci"
+      },
+      {
+        "group": 111,
+        "iface": "eth0",
+        "name": "mware11",
+        "order": 20,
+        "roletype": "mware"
+      },
+      {
+        "group": 111,
+        "iface": "eth0",
+        "name": "mware12",
+        "order": 10,
+        "roletype": "mware"
+      },
+      {
+        "group": 211,
+        "iface": "eth0",
+        "name": "mware21",
+        "order": 20,
+        "roletype": "mware"
+      },
+      {
+        "group": 211,
+        "iface": "eth0",
+        "name": "mware22",
+        "order": 10,
+        "roletype": "mware"
+      },
+      {
+        "certdir": "alias://paths/a",
+        "iface": "eth0",
+        "name": "esg11",
+        "roleid": 1101,
+        "roletype": "esg",
+        "separate": true,
+        "tcp": 5080,
+        "tls": 5081,
+        "udp": 5080
+      },
+      {
+        "certdir": "alias://paths/a",
+        "iface": "eth0",
+        "name": "esg12",
+        "roleid": 1201,
+        "roletype": "esg",
+        "separate": true,
+        "tcp": 5080,
+        "tls": 5081,
+        "udp": 5080
+      },
+      {
+        "certdir": "alias://paths/a",
+        "iface": "eth0",
+        "name": "esg21",
+        "roleid": 2101,
+        "roletype": "esg",
+        "separate": true,
+        "tcp": 5080,
+        "tls": 5081,
+        "udp": 5080
+      },
+      {
+        "certdir": "alias://paths/a",
+        "iface": "eth0",
+        "name": "esg22",
+        "roleid": 2201,
+        "roletype": "esg",
+        "separate": true,
+        "tcp": 5080,
+        "tls": 5081,
+        "udp": 5080
+      },
+      {
+        "allow_ac_set": false,
+        "check_by_options_on_limit": true,
+        "iface": "eth0",
+        "name": "b2bua11",
+        "record_conf": true,
+        "record_ivr": false,
+        "roleid": 1102,
+        "roletype": "b2b",
+        "separate": true,
+        "tcp": 5090,
+        "udp": 5090
+      },
+      {
+        "allow_ac_set": false,
+        "check_by_options_on_limit": true,
+        "iface": "eth0",
+        "name": "b2bua12",
+        "record_conf": true,
+        "record_ivr": false,
+        "roleid": 1202,
+        "roletype": "b2b",
+        "separate": true,
+        "tcp": 5090,
+        "udp": 5090
+      },
+      {
+        "allow_ac_set": false,
+        "check_by_options_on_limit": true,
+        "iface": "eth0",
+        "name": "b2bua21",
+        "record_conf": true,
+        "record_ivr": false,
+        "roleid": 2102,
+        "roletype": "b2b",
+        "separate": true,
+        "tcp": 5090,
+        "udp": 5090
+      },
+      {
+        "allow_ac_set": false,
+        "check_by_options_on_limit": true,
+        "iface": "eth0",
+        "name": "b2bua22",
+        "record_conf": true,
+        "record_ivr": false,
+        "roleid": 2202,
+        "roletype": "b2b",
+        "separate": true,
+        "tcp": 5090,
+        "udp": 5090
+      },
+      {
+        "certdir": "alias://paths/a",
+        "iface": "eth0",
+        "name": "sg11",
+        "roleid": 1103,
+        "roletype": "sg",
+        "separate": true,
+        "substitute_domains": [
+          {
+            "addr": "10.52.35.47",
+            "domain": "cisco.sip.some.ru"
+          },
+          {
+            "addr": "10.52.35.48",
+            "domain": "cisco.sip.some.ru"
+          },
+          {
+            "addr": "10.51.35.15",
+            "domain": "cisco.sip.some.ru"
+          },
+          {
+            "addr": "10.51.35.16",
+            "domain": "cisco.sip.some.ru"
+          }
+        ],
+        "tcp": 5060,
+        "tls": 5061,
+        "translit": false,
+        "udp": 5060,
+        "wss": 5063
+      },
+      {
+        "certdir": "alias://paths/a",
+        "iface": "eth0",
+        "name": "sg12",
+        "roleid": 1203,
+        "roletype": "sg",
+        "separate": true,
+        "substitute_domains": [
+          {
+            "addr": "10.52.35.47",
+            "domain": "cisco.sip.some.ru"
+          },
+          {
+            "addr": "10.52.35.48",
+            "domain": "cisco.sip.some.ru"
+          },
+          {
+            "addr": "10.51.35.15",
+            "domain": "cisco.sip.some.ru"
+          },
+          {
+            "addr": "10.51.35.16",
+            "domain": "cisco.sip.some.ru"
+          }
+        ],
+        "tcp": 5060,
+        "tls": 5061,
+        "translit": false,
+        "udp": 5060,
+        "wss": 5063
+      },
+      {
+        "certdir": "alias://paths/a",
+        "iface": "eth0",
+        "name": "sg21",
+        "roleid": 2103,
+        "roletype": "sg",
+        "separate": true,
+        "substitute_domains": [
+          {
+            "addr": "10.52.35.47",
+            "domain": "cisco.sip.some.ru"
+          },
+          {
+            "addr": "10.52.35.48",
+            "domain": "cisco.sip.some.ru"
+          },
+          {
+            "addr": "10.51.35.15",
+            "domain": "cisco.sip.some.ru"
+          },
+          {
+            "addr": "10.51.35.16",
+            "domain": "cisco.sip.some.ru"
+          }
+        ],
+        "tcp": 5060,
+        "tls": 5061,
+        "translit": false,
+        "udp": 5060,
+        "wss": 5063
+      },
+      {
+        "certdir": "alias://paths/a",
+        "iface": "eth0",
+        "name": "sg22",
+        "roleid": 2203,
+        "roletype": "sg",
+        "separate": true,
+        "substitute_domains": [
+          {
+            "addr": "10.52.35.47",
+            "domain": "cisco.sip.some.ru"
+          },
+          {
+            "addr": "10.52.35.48",
+            "domain": "cisco.sip.some.ru"
+          },
+          {
+            "addr": "10.51.35.15",
+            "domain": "cisco.sip.some.ru"
+          },
+          {
+            "addr": "10.51.35.16",
+            "domain": "cisco.sip.some.ru"
+          }
+        ],
+        "tcp": 5060,
+        "tls": 5061,
+        "translit": false,
+        "udp": 5060,
+        "wss": 5063
+      },
+      {
+        "group": 121,
+        "iface": "eth0",
+        "name": "reg11",
+        "order": 20,
+        "roletype": "sr"
+      },
+      {
+        "group": 121,
+        "iface": "eth0",
+        "name": "reg12",
+        "order": 10,
+        "roletype": "sr"
+      },
+      {
+        "group": 221,
+        "iface": "eth0",
+        "name": "reg21",
+        "order": 20,
+        "roletype": "sr"
+      },
+      {
+        "group": 221,
+        "iface": "eth0",
+        "name": "reg22",
+        "order": 10,
+        "roletype": "sr"
+      },
+      {
+        "iface": "eth0",
+        "name": "conf11",
+        "roleid": 1104,
+        "roletype": "conf",
+        "separate": true,
+        "tcp": 5086,
+        "udp": 5086
+      },
+      {
+        "iface": "eth0",
+        "name": "conf12",
+        "roleid": 1204,
+        "roletype": "conf",
+        "separate": true,
+        "tcp": 5086,
+        "udp": 5086
+      },
+      {
+        "iface": "eth0",
+        "name": "conf21",
+        "roleid": 2104,
+        "roletype": "conf",
+        "separate": true,
+        "tcp": 5086,
+        "udp": 5086
+      },
+      {
+        "iface": "eth0",
+        "name": "conf22",
+        "roleid": 2204,
+        "roletype": "conf",
+        "separate": true,
+        "tcp": 5086,
+        "udp": 5086
+      },
+      {
+        "group": 141,
+        "iface": "eth0",
+        "name": "sel11",
+        "order": 10,
+        "roletype": "sel"
+      },
+      {
+        "group": 141,
+        "iface": "eth0",
+        "name": "sel12",
+        "order": 20,
+        "roletype": "sel"
+      },
+      {
+        "group": 241,
+        "iface": "eth0",
+        "name": "sel21",
+        "order": 10,
+        "roletype": "sel"
+      },
+      {
+        "group": 241,
+        "iface": "eth0",
+        "name": "sel22",
+        "order": 20,
+        "roletype": "sel"
+      },
+      {
+        "domainqlist": [
+          {
+            "key": "q14",
+            "patterns": "chatevents,userevents,alertcallevents,dcevents,ivrevents,ivrhuntqevents,providerevents,scriptevents,selectorevents,sipuserevents"
+          }
+        ],
+        "group": 161,
+        "iface": "eth0",
+        "name": "sq11",
+        "order": 10,
+        "qlist": [
+          {
+            "key": "q13",
+            "patterns": "mixerevents"
+          },
+          {
+            "key": "q11",
+            "patterns": "callevents,confevents"
+          }
+        ],
+        "roletype": "sq"
+      },
+      {
+        "domainqlist": [
+          {
+            "key": "q14",
+            "patterns": "chatevents,userevents,alertcallevents,dcevents,ivrevents,ivrhuntqevents,providerevents,scriptevents,selectorevents,sipuserevents"
+          }
+        ],
+        "group": 161,
+        "iface": "eth0",
+        "name": "sq12",
+        "order": 20,
+        "qlist": [
+          {
+            "key": "q13",
+            "patterns": "mixerevents"
+          },
+          {
+            "key": "q11",
+            "patterns": "callevents,confevents"
+          }
+        ],
+        "roletype": "sq"
+      },
+      {
+        "domainqlist": [
+          {
+            "key": "q24",
+            "patterns": "chatevents,userevents,alertcallevents,dcevents,ivrevents,ivrhuntqevents,providerevents,scriptevents,selectorevents,sipuserevents"
+          }
+        ],
+        "group": 261,
+        "iface": "eth0",
+        "name": "sq21",
+        "order": 10,
+        "qlist": [
+          {
+            "key": "q23",
+            "patterns": "mixerevents"
+          },
+          {
+            "key": "q21",
+            "patterns": "callevents,confevents"
+          }
+        ],
+        "roletype": "sq"
+      },
+      {
+        "domainqlist": [
+          {
+            "key": "q24",
+            "patterns": "chatevents,userevents,alertcallevents,dcevents,ivrevents,ivrhuntqevents,providerevents,scriptevents,selectorevents,sipuserevents"
+          }
+        ],
+        "group": 261,
+        "iface": "eth0",
+        "name": "sq22",
+        "order": 20,
+        "qlist": [
+          {
+            "key": "q23",
+            "patterns": "mixerevents"
+          },
+          {
+            "key": "q21",
+            "patterns": "callevents,confevents"
+          }
+        ],
+        "roletype": "sq"
+      },
+      {
+        "asdf": 123,
+        "group": 113,
+        "iface": "eth0",
+        "name": "callstore11",
+        "order": 20,
+        "roletype": "callstore"
+      },
+      {
+        "group": 113,
+        "iface": "eth0",
+        "name": "callstore12",
+        "order": 10,
+        "roletype": "callstore"
+      },
+      {
+        "group": 213,
+        "iface": "eth0",
+        "name": "callstore21",
+        "order": 20,
+        "roletype": "callstore"
+      },
+      {
+        "group": 213,
+        "iface": "eth0",
+        "name": "callstore22",
+        "order": 10,
+        "roletype": "callstore"
+      },
+      {
+        "group": 122,
+        "iface": "eth0",
+        "name": "store11",
+        "order": 20,
+        "roletype": "st"
+      },
+      {
+        "group": 122,
+        "iface": "eth0",
+        "name": "store12",
+        "order": 10,
+        "roletype": "st"
+      },
+      {
+        "group": 222,
+        "iface": "eth0",
+        "name": "store21",
+        "order": 20,
+        "roletype": "st"
+      },
+      {
+        "group": 222,
+        "iface": "eth0",
+        "name": "store22",
+        "order": 10,
+        "roletype": "st"
+      },
+      {
+        "group": 112,
+        "iface": "eth0",
+        "name": "sts11",
+        "order": 20,
+        "roletype": "sts"
+      },
+      {
+        "group": 112,
+        "iface": "eth0",
+        "name": "sts12",
+        "order": 10,
+        "roletype": "sts"
+      },
+      {
+        "group": 212,
+        "iface": "eth0",
+        "name": "sts21",
+        "order": 20,
+        "roletype": "sts"
+      },
+      {
+        "group": 212,
+        "iface": "eth0",
+        "name": "sts22",
+        "order": 10,
+        "roletype": "sts"
+      },
+      {
+        "channels": "2",
+        "encoding": "mp3",
+        "iface": "eth0",
+        "maxevents": 2,
+        "name": "mix11",
+        "recstorageid": "local",
+        "roletype": "mix",
+        "samplerate": "8000",
+        "subscrqlist": ["q13"]
+      },
+      {
+        "channels": "2",
+        "encoding": "mp3",
+        "iface": "eth0",
+        "maxevents": 2,
+        "name": "mix12",
+        "recstorageid": "local",
+        "roletype": "mix",
+        "samplerate": "8000",
+        "subscrqlist": ["q13"]
+      },
+      {
+        "channels": "2",
+        "encoding": "mp3",
+        "iface": "eth0",
+        "maxevents": 2,
+        "name": "mix21",
+        "recstorageid": "local",
+        "roletype": "mix",
+        "samplerate": "8000",
+        "subscrqlist": ["q23"]
+      },
+      {
+        "channels": "2",
+        "encoding": "mp3",
+        "iface": "eth0",
+        "maxevents": 2,
+        "name": "mix22",
+        "recstorageid": "local",
+        "roletype": "mix",
+        "samplerate": "8000",
+        "subscrqlist": ["q23"]
+      },
+      {
+        "certdir": "alias://paths/a",
+        "httpport": 80,
+        "httpsport": 443,
+        "iface": "eth0",
+        "name": "ws11",
+        "ports_mode": "both",
+        "roletype": "ws",
+        "service_mode": "both",
+        "websock_debug_level": 1
+      },
+      {
+        "certdir": "alias://paths/a",
+        "httpport": 80,
+        "httpsport": 443,
+        "iface": "eth0",
+        "name": "ws12",
+        "ports_mode": "both",
+        "roletype": "ws",
+        "service_mode": "both",
+        "websock_debug_level": 1
+      },
+      {
+        "certdir": "alias://paths/a",
+        "httpport": 80,
+        "httpsport": 443,
+        "iface": "eth0",
+        "name": "ws21",
+        "ports_mode": "both",
+        "roletype": "ws",
+        "service_mode": "both",
+        "websock_debug_level": 1
+      },
+      {
+        "certdir": "alias://paths/a",
+        "httpport": 80,
+        "httpsport": 443,
+        "iface": "eth0",
+        "name": "ws22",
+        "ports_mode": "both",
+        "roletype": "ws",
+        "service_mode": "both",
+        "websock_debug_level": 1
+      },
+      {
+        "group": 142,
+        "iface": "eth0",
+        "name": "vmail11",
+        "order": 10,
+        "roletype": "vmail"
+      },
+      {
+        "group": 142,
+        "iface": "eth0",
+        "name": "vmail12",
+        "order": 20,
+        "roletype": "vmail"
+      },
+      {
+        "group": 242,
+        "iface": "eth0",
+        "name": "vmail21",
+        "order": 10,
+        "roletype": "vmail"
+      },
+      {
+        "group": 242,
+        "iface": "eth0",
+        "name": "vmail22",
+        "order": 20,
+        "roletype": "vmail"
+      },
+      {
+        "iface": "eth0",
+        "name": "ivr11",
+        "roleid": 1111,
+        "roletype": "ivr",
+        "separate": true,
+        "tcp": 5095,
+        "udp": 5095
+      },
+      {
+        "iface": "eth0",
+        "name": "ivr12",
+        "roleid": 1211,
+        "roletype": "ivr",
+        "separate": true,
+        "tcp": 5095,
+        "udp": 5095
+      },
+      {
+        "iface": "eth0",
+        "name": "ivr21",
+        "roleid": 2111,
+        "roletype": "ivr",
+        "separate": true,
+        "tcp": 5095,
+        "udp": 5095
+      },
+      {
+        "iface": "eth0",
+        "name": "ivr22",
+        "roleid": 2211,
+        "roletype": "ivr",
+        "separate": true,
+        "tcp": 5095,
+        "udp": 5095
+      },
+      {
+        "dbconnstrings": ["alias://pgdb_strings/default_connstring0"],
+        "domainsubscrqlist": ["q14"],
+        "group": 162,
+        "iface": "eth0",
+        "name": "cdr11",
+        "order": 10,
+        "roletype": "cdr",
+        "subscrqlist": ["q11"]
+      },
+      {
+        "dbconnstrings": ["alias://pgdb_strings/default_connstring0"],
+        "domainsubscrqlist": ["q14"],
+        "group": 162,
+        "iface": "eth0",
+        "name": "cdr12",
+        "order": 20,
+        "roletype": "cdr",
+        "subscrqlist": ["q11"]
+      },
+      {
+        "dbconnstrings": ["alias://pgdb_strings/default_connstring0"],
+        "domainsubscrqlist": ["q24"],
+        "group": 262,
+        "iface": "eth0",
+        "name": "cdr21",
+        "order": 10,
+        "roletype": "cdr",
+        "subscrqlist": ["q21"]
+      },
+      {
+        "dbconnstrings": ["alias://pgdb_strings/default_connstring0"],
+        "domainsubscrqlist": ["q24"],
+        "group": 262,
+        "iface": "eth0",
+        "name": "cdr22",
+        "order": 20,
+        "roletype": "cdr",
+        "subscrqlist": ["q21"]
+      },
+      {
+        "iface": "eth0",
+        "name": "svc11",
+        "roleid": 1112,
+        "roletype": "scr",
+        "separate": true
+      },
+      {
+        "iface": "eth0",
+        "name": "svc12",
+        "roleid": 1212,
+        "roletype": "scr",
+        "separate": true
+      },
+      {
+        "iface": "eth0",
+        "name": "svc21",
+        "roleid": 2112,
+        "roletype": "scr",
+        "separate": true
+      },
+      {
+        "iface": "eth0",
+        "name": "svc22",
+        "roleid": 2212,
+        "roletype": "scr",
+        "separate": true
+      },
+      {
+        "dbconnstrings": ["alias://pgdb_strings/default_connstring0"],
+        "group": 163,
+        "iface": "eth0",
+        "intervalerrsec": 60,
+        "intervalsec": 30,
+        "mode": "move",
+        "name": "jrnl11",
+        "order": 20,
+        "roletype": "jrnl"
+      },
+      {
+        "dbconnstrings": ["alias://pgdb_strings/default_connstring0"],
+        "group": 163,
+        "iface": "eth0",
+        "intervalerrsec": 60,
+        "intervalsec": 30,
+        "mode": "move",
+        "name": "jrnl12",
+        "order": 10,
+        "roletype": "jrnl"
+      },
+      {
+        "dbconnstrings": ["alias://pgdb_strings/default_connstring0"],
+        "group": 263,
+        "iface": "eth0",
+        "intervalerrsec": 60,
+        "intervalsec": 30,
+        "mode": "move",
+        "name": "jrnl21",
+        "order": 20,
+        "roletype": "jrnl"
+      },
+      {
+        "dbconnstrings": ["alias://pgdb_strings/default_connstring0"],
+        "group": 263,
+        "iface": "eth0",
+        "intervalerrsec": 60,
+        "intervalsec": 30,
+        "mode": "move",
+        "name": "jrnl22",
+        "order": 10,
+        "roletype": "jrnl"
+      },
+      {
+        "group": 164,
+        "iface": "eth0",
+        "intervalerrsec": 30,
+        "intervalsec": 60,
+        "mode": "move",
+        "name": "recmov11",
+        "order": 10,
+        "roletype": "recmover"
+      },
+      {
+        "group": 164,
+        "iface": "eth0",
+        "intervalerrsec": 30,
+        "intervalsec": 60,
+        "mode": "move",
+        "name": "recmov12",
+        "order": 20,
+        "roletype": "recmover"
+      },
+      {
+        "group": 264,
+        "iface": "eth0",
+        "intervalerrsec": 30,
+        "intervalsec": 60,
+        "mode": "move",
+        "name": "recmov21",
+        "order": 10,
+        "roletype": "recmover"
+      },
+      {
+        "group": 264,
+        "iface": "eth0",
+        "intervalerrsec": 30,
+        "intervalsec": 60,
+        "mode": "move",
+        "name": "recmov22",
+        "order": 20,
+        "roletype": "recmover"
+      },
+      {
+        "group": 151,
+        "iface": "eth0",
+        "name": "wssubscr11",
+        "order": 10,
+        "roletype": "wssubscr"
+      },
+      {
+        "group": 151,
+        "iface": "eth0",
+        "name": "wssubscr12",
+        "order": 20,
+        "roletype": "wssubscr"
+      },
+      {
+        "group": 251,
+        "iface": "eth0",
+        "name": "wssubscr21",
+        "order": 10,
+        "roletype": "wssubscr"
+      },
+      {
+        "group": 251,
+        "iface": "eth0",
+        "name": "wssubscr22",
+        "order": 20,
+        "roletype": "wssubscr"
+      },
+      {
+        "group": 131,
+        "iface": "eth0",
+        "name": "usr11",
+        "order": 20,
+        "roletype": "usr"
+      },
+      {
+        "group": 131,
+        "iface": "eth0",
+        "name": "usr12",
+        "order": 10,
+        "roletype": "usr"
+      },
+      {
+        "group": 231,
+        "iface": "eth0",
+        "name": "usr21",
+        "order": 20,
+        "roletype": "usr"
+      },
+      {
+        "group": 231,
+        "iface": "eth0",
+        "name": "usr22",
+        "order": 10,
+        "roletype": "usr"
+      },
+      {
+        "group": 132,
+        "iface": "eth0",
+        "name": "hunt11",
+        "order": 20,
+        "roletype": "huntq"
+      },
+      {
+        "group": 132,
+        "iface": "eth0",
+        "name": "hunt12",
+        "order": 10,
+        "roletype": "huntq"
+      },
+      {
+        "group": 232,
+        "iface": "eth0",
+        "name": "hunt21",
+        "order": 20,
+        "roletype": "huntq"
+      },
+      {
+        "group": 232,
+        "iface": "eth0",
+        "name": "hunt22",
+        "order": 10,
+        "roletype": "huntq"
+      },
+      {
+        "group": 133,
+        "iface": "eth0",
+        "name": "rsv11",
+        "order": 10,
+        "roletype": "rsv"
+      },
+      {
+        "group": 133,
+        "iface": "eth0",
+        "name": "rsv12",
+        "order": 20,
+        "roletype": "rsv"
+      },
+      {
+        "group": 233,
+        "iface": "eth0",
+        "name": "rsv21",
+        "order": 10,
+        "roletype": "rsv"
+      },
+      {
+        "group": 233,
+        "iface": "eth0",
+        "name": "rsv22",
+        "order": 20,
+        "roletype": "rsv"
+      },
+      {
+        "group": 191,
+        "iface": "eth0",
+        "name": "mgc11_1",
+        "order": 10,
+        "port": 2954,
+        "roleid": 1191,
+        "roletype": "mgc"
+      },
+      {
+        "group": 191,
+        "iface": "eth0",
+        "name": "mgc11_2",
+        "order": 20,
+        "port": 2954,
+        "roleid": 1291,
+        "roletype": "mgc"
+      },
+      {
+        "group": 291,
+        "iface": "eth0",
+        "name": "mgc21_1",
+        "order": 10,
+        "port": 2954,
+        "roleid": 2191,
+        "roletype": "mgc"
+      },
+      {
+        "group": 291,
+        "iface": "eth0",
+        "name": "mgc21_2",
+        "order": 20,
+        "port": 2954,
+        "roleid": 2291,
+        "roletype": "mgc"
+      },
+      {
+        "iface": "eth0",
+        "logmaxsize": 15,
+        "logtrace": ["error"],
+        "mgcgroup": 191,
+        "mgrecordcalls": "alias://paths/b",
+        "name": "mg11_1",
+        "port": 2945,
+        "roleid": 1181,
+        "roletype": "mg",
+        "rtpiface": "eth1",
+        "separate": true
+      },
+      {
+        "iface": "eth0",
+        "logmaxsize": 15,
+        "logtrace": ["error"],
+        "mgcgroup": 191,
+        "mgrecordcalls": "alias://paths/b",
+        "name": "mg11_2",
+        "port": 2945,
+        "roleid": 1281,
+        "roletype": "mg",
+        "rtpiface": "eth1",
+        "separate": true
+      },
+      {
+        "iface": "eth0",
+        "logmaxsize": 15,
+        "logtrace": ["error"],
+        "mgcgroup": 291,
+        "mgrecordcalls": "alias://paths/b",
+        "name": "mg21_1",
+        "port": 2945,
+        "roleid": 2181,
+        "roletype": "mg",
+        "rtpiface": "eth1",
+        "separate": true
+      },
+      {
+        "iface": "eth0",
+        "logmaxsize": 15,
+        "logtrace": ["error"],
+        "mgcgroup": 291,
+        "mgrecordcalls": "alias://paths/b",
+        "name": "mg21_2",
+        "port": 2945,
+        "roleid": 2281,
+        "roletype": "mg",
+        "rtpiface": "eth1",
+        "separate": true
+      },
+      {
+        "group": 192,
+        "iface": "eth0",
+        "name": "mgc12_1",
+        "order": 20,
+        "port": 2955,
+        "roleid": 1192,
+        "roletype": "mgc"
+      },
+      {
+        "group": 192,
+        "iface": "eth0",
+        "name": "mgc12_2",
+        "order": 10,
+        "port": 2955,
+        "roleid": 1292,
+        "roletype": "mgc"
+      },
+      {
+        "group": 292,
+        "iface": "eth0",
+        "name": "mgc22_1",
+        "order": 20,
+        "port": 2955,
+        "roleid": 2192,
+        "roletype": "mgc"
+      },
+      {
+        "group": 292,
+        "iface": "eth0",
+        "name": "mgc22_2",
+        "order": 10,
+        "port": 2955,
+        "roleid": 2292,
+        "roletype": "mgc"
+      },
+      {
+        "iface": "eth0",
+        "logmaxsize": 15,
+        "logtrace": ["error"],
+        "mgcgroup": 192,
+        "mgrecordcalls": "alias://paths/b",
+        "name": "mg12_1",
+        "port": 2946,
+        "roleid": 1182,
+        "roletype": "mg",
+        "rtpiface": "eth1",
+        "separate": true
+      },
+      {
+        "iface": "eth0",
+        "logmaxsize": 15,
+        "logtrace": ["error"],
+        "mgcgroup": 192,
+        "mgrecordcalls": "alias://paths/b",
+        "name": "mg12_2",
+        "port": 2946,
+        "roleid": 1282,
+        "roletype": "mg",
+        "rtpiface": "eth1",
+        "separate": true
+      },
+      {
+        "iface": "eth0",
+        "logmaxsize": 15,
+        "logtrace": ["error"],
+        "mgcgroup": 292,
+        "mgrecordcalls": "alias://paths/b",
+        "name": "mg22_1",
+        "port": 2946,
+        "roleid": 2182,
+        "roletype": "mg",
+        "rtpiface": "eth1",
+        "separate": true
+      },
+      {
+        "iface": "eth0",
+        "logmaxsize": 15,
+        "logtrace": ["error"],
+        "mgcgroup": 292,
+        "mgrecordcalls": "alias://paths/b",
+        "name": "mg22_2",
+        "port": 2946,
+        "roleid": 2282,
+        "roletype": "mg",
+        "rtpiface": "eth1",
+        "separate": true
+      },
+      {
+        "group": 173,
+        "iface": "eth0",
+        "name": "logstore11",
+        "order": 10,
+        "roletype": "logstore",
+        "storedays": 30,
+        "storepath": "alias://paths/c",
+        "storesize": 50
+      },
+      {
+        "group": 173,
+        "iface": "eth0",
+        "name": "logstore12",
+        "order": 20,
+        "roletype": "logstore",
+        "storedays": 30,
+        "storepath": "alias://paths/c",
+        "storesize": 50
+      },
+      {
+        "group": 273,
+        "iface": "eth0",
+        "name": "logstore21",
+        "order": 10,
+        "roletype": "logstore",
+        "storedays": 30,
+        "storepath": "alias://paths/c",
+        "storesize": 50
+      },
+      {
+        "group": 273,
+        "iface": "eth0",
+        "name": "logstore22",
+        "order": 20,
+        "roletype": "logstore",
+        "storedays": 30,
+        "storepath": "alias://paths/c",
+        "storesize": 50
+      }
+    ],
+    "servers": [
+      {
+        "descr": "DataCentr 01. Srv101 \nCPU: 2 \nMEMORY: 2Gb",
+        "erlangtcp": 4369,
+        "fsync_iface_device": "eth0",
+        "globalsharepath": "alias://paths/d",
+        "ifaces": [
+          {
+            "key": "eth0",
+            "value": "10.1.0.2"
+          },
+          {
+            "key": "eth1",
+            "value": "10.52.35.47"
+          }
+        ],
+        "localpath": "alias://paths/f",
+        "logiface": "eth0",
+        "name": "srv101",
+        "nodesportrange": "9310:90",
+        "recstorepaths": [
+          {
+            "key": "local",
+            "value": "alias://paths/h"
+          }
+        ],
+        "sitesharepath": "alias://paths/e",
+        "syncrootpath": "alias://paths/g"
+      },
+      {
+        "descr": "DataCentr 01. Srv102",
+        "erlangtcp": 4369,
+        "fsync_iface_device": "eth0",
+        "globalsharepath": "alias://paths/d",
+        "ifaces": [
+          {
+            "key": "eth0",
+            "value": "10.1.0.3"
+          },
+          {
+            "key": "eth1",
+            "value": "10.52.35.48"
+          }
+        ],
+        "localpath": "alias://paths/f",
+        "logiface": "eth0",
+        "name": "srv102",
+        "nodesportrange": "9310:90",
+        "recstorepaths": [
+          {
+            "key": "local",
+            "value": "alias://paths/h"
+          }
+        ],
+        "sitesharepath": "alias://paths/e",
+        "syncrootpath": "alias://paths/g"
+      },
+      {
+        "descr": "DataCentr 01. Srv103",
+        "erlangtcp": 4369,
+        "fsync_iface_device": "eth0",
+        "globalsharepath": "alias://paths/d",
+        "ifaces": [
+          {
+            "key": "eth0",
+            "value": "10.1.0.4"
+          },
+          {
+            "key": "eth1",
+            "value": "10.52.35.49"
+          }
+        ],
+        "localpath": "alias://paths/f",
+        "logiface": "eth0",
+        "name": "srv103",
+        "nodesportrange": "9310:90",
+        "recstorepaths": [
+          {
+            "key": "local",
+            "value": "alias://paths/h"
+          }
+        ],
+        "sitesharepath": "alias://paths/e",
+        "syncrootpath": "alias://paths/g"
+      },
+      {
+        "descr": "DataCentr 01. Srv104",
+        "erlangtcp": 4369,
+        "fsync_iface_device": "eth0",
+        "globalsharepath": "alias://paths/d",
+        "ifaces": [
+          {
+            "key": "eth0",
+            "value": "10.1.0.5"
+          },
+          {
+            "key": "eth1",
+            "value": "10.52.35.50"
+          }
+        ],
+        "localpath": "alias://paths/f",
+        "logiface": "eth0",
+        "name": "srv104",
+        "nodesportrange": "9310:90",
+        "recstorepaths": [
+          {
+            "key": "local",
+            "value": "alias://paths/h"
+          }
+        ],
+        "sitesharepath": "alias://paths/e",
+        "syncrootpath": "alias://paths/g"
+      },
+      {
+        "descr": "DataCentr 02. Srv201",
+        "erlangtcp": 4369,
+        "fsync_iface_device": "eth0",
+        "globalsharepath": "alias://paths/d",
+        "ifaces": [
+          {
+            "key": "eth0",
+            "value": "10.1.0.6"
+          },
+          {
+            "key": "eth1",
+            "value": "10.51.35.15"
+          }
+        ],
+        "localpath": "alias://paths/f",
+        "logiface": "eth0",
+        "name": "srv201",
+        "nodesportrange": "9310:90",
+        "recstorepaths": [
+          {
+            "key": "local",
+            "value": "alias://paths/h"
+          }
+        ],
+        "sitesharepath": "alias://paths/e",
+        "syncrootpath": "alias://paths/g"
+      },
+      {
+        "descr": "DataCentr 02. Srv202",
+        "erlangtcp": 4369,
+        "fsync_iface_device": "eth0",
+        "globalsharepath": "alias://paths/d",
+        "ifaces": [
+          {
+            "key": "eth0",
+            "value": "10.1.0.7"
+          },
+          {
+            "key": "eth1",
+            "value": "10.51.35.16"
+          }
+        ],
+        "localpath": "alias://paths/f",
+        "logiface": "eth0",
+        "name": "srv202",
+        "nodesportrange": "9310:90",
+        "recstorepaths": [
+          {
+            "key": "local",
+            "value": "alias://paths/h"
+          }
+        ],
+        "sitesharepath": "alias://paths/e",
+        "syncrootpath": "alias://paths/g"
+      },
+      {
+        "descr": "DataCentr 02. Srv203",
+        "erlangtcp": 4369,
+        "fsync_iface_device": "eth0",
+        "globalsharepath": "alias://paths/d",
+        "ifaces": [
+          {
+            "key": "eth0",
+            "value": "10.1.0.8"
+          },
+          {
+            "key": "eth1",
+            "value": "10.51.35.17"
+          }
+        ],
+        "localpath": "alias://paths/f",
+        "logiface": "eth0",
+        "name": "srv203",
+        "nodesportrange": "9310:90",
+        "recstorepaths": [
+          {
+            "key": "local",
+            "value": "alias://paths/h"
+          }
+        ],
+        "sitesharepath": "alias://paths/e",
+        "syncrootpath": "alias://paths/g"
+      },
+      {
+        "descr": "DataCentr 02. Srv204",
+        "erlangtcp": 4369,
+        "fsync_iface_device": "eth0",
+        "globalsharepath": "alias://paths/d",
+        "ifaces": [
+          {
+            "key": "eth0",
+            "value": "10.1.0.9"
+          },
+          {
+            "key": "eth1",
+            "value": "10.51.35.18"
+          }
+        ],
+        "localpath": "alias://paths/f",
+        "logiface": "eth0",
+        "name": "srv204",
+        "nodesportrange": "9310:90",
+        "recstorepaths": [
+          {
+            "key": "local",
+            "value": "alias://paths/h"
+          }
+        ],
+        "sitesharepath": "alias://paths/e",
+        "syncrootpath": "alias://paths/g"
+      }
+    ],
+    "sites": [
+      {
+        "descr": "DataCentr 01",
+        "domains": ["master_td", "td_sip"],
+        "name": "site01",
+        "sitetype": "master_communication"
+      },
+      {
+        "descr": "DataCentr 02",
+        "domains": ["td_sip"],
+        "name": "site02",
+        "sitetype": "communication"
+      }
+    ],
+    "structure": [
+      {
+        "servers": [
+          {
+            "roles": [
+              "mic",
+              "mdc1",
+              "ic11",
+              "rpco11",
+              "rpci11",
+              "mware11",
+              "esg11",
+              "b2bua11",
+              "sg11",
+              "reg11",
+              "conf11",
+              "sel11",
+              "sq11",
+              "callstore11",
+              "store11",
+              "sts11",
+              "mgc11_1",
+              "mgc12_1",
+              "mix11",
+              "ws11",
+              "ivr11",
+              "svc11",
+              "wssubscr11",
+              "usr11"
+            ],
+            "server": "srv101"
+          },
+          {
+            "roles": [
+              "ic12",
+              "rpco12",
+              "rpci12",
+              "mware12",
+              "esg12",
+              "b2bua12",
+              "sg12",
+              "reg12",
+              "conf12",
+              "sel12",
+              "sq12",
+              "callstore12",
+              "store12",
+              "sts12",
+              "mgc11_2",
+              "mgc12_2",
+              "mix12",
+              "ws12",
+              "ivr12",
+              "svc12",
+              "wssubscr12",
+              "usr12"
+            ],
+            "server": "srv102"
+          },
+          {
+            "roles": ["mg11_1", "mg12_1", "vmail11", "cdr11", "jrnl11", "hunt11", "rsv11", "recmov11", "logstore11"],
+            "server": "srv103"
+          },
+          {
+            "roles": ["mg11_2", "mg12_2", "vmail12", "cdr12", "jrnl12", "hunt12", "rsv12", "recmov12", "logstore12"],
+            "server": "srv104"
+          }
+        ],
+        "site": "site01"
+      },
+      {
+        "servers": [
+          {
+            "roles": [
+              "sdc21",
+              "ic21",
+              "rpco21",
+              "rpci21",
+              "mware21",
+              "esg21",
+              "b2bua21",
+              "sg21",
+              "reg21",
+              "conf21",
+              "sel21",
+              "sq21",
+              "callstore21",
+              "store21",
+              "sts21",
+              "mgc21_1",
+              "mgc22_1",
+              "mix21",
+              "ws21",
+              "ivr21",
+              "svc21",
+              "wssubscr21",
+              "usr21"
+            ],
+            "server": "srv201"
+          },
+          {
+            "roles": [
+              "sdc22",
+              "ic22",
+              "rpco22",
+              "rpci22",
+              "mware22",
+              "esg22",
+              "b2bua22",
+              "sg22",
+              "reg22",
+              "conf22",
+              "sel22",
+              "sq22",
+              "callstore22",
+              "store22",
+              "sts22",
+              "mgc21_2",
+              "mgc22_2",
+              "mix22",
+              "ws22",
+              "ivr22",
+              "svc22",
+              "wssubscr22",
+              "usr22"
+            ],
+            "server": "srv202"
+          },
+          {
+            "roles": ["mg21_1", "mg22_1", "vmail21", "cdr21", "jrnl21", "hunt21", "rsv21", "recmov21", "logstore21"],
+            "server": "srv203"
+          },
+          {
+            "roles": ["mg21_2", "mg22_2", "vmail22", "cdr22", "jrnl22", "hunt22", "rsv22", "recmov22", "logstore22"],
+            "server": "srv204"
+          }
+        ],
+        "site": "site02"
+      }
+    ]
+  },
+  "ext": {
+    "activate_time": "2022-06-13T21:01:33.41Z",
+    "ct": "2022-06-13T21:01:33.38Z",
+    "lwt": "2022-06-13T21:01:33.38Z",
+    "version": "3.0"
+  },
+
+  "name": "add recmover. Ver 05",
+  "opts": {
+    "comment": "by MK",
+    "title": ""
+  }
+}

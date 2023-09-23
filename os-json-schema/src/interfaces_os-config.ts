@@ -60,7 +60,7 @@ interface IOSConfigDomain {
  * https://dev01.oktell.ru/docs/r/develop/entities/master/configuration.html
  */
 export interface IOSConfig {
-  /**Техническое поле**/
+  /**Техническое поле*/
   $schema: string
   /**
    * 

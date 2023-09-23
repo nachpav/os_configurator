@@ -1,0 +1,16 @@
+{
+  "name": "ooossa_os_configurator-table-gen",
+  "version": "1.0.0",
+  "description": "Generate table in browser, for OS config file",
+  "scripts": {
+    "build": "tsc && npx parcel build ./src/index.html --dist-dir ./public --no-source-maps --no-cache",
+    "live": "cd public && npx live-server --open=index.html"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^5.2.2"
+  },
+  "devDependencies": {}
+}

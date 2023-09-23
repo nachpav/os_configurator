@@ -4,7 +4,7 @@
     "description": "Конфигурация (configuration)\nСтруктура, объединяющая слои инфраструктуры, логики и данных между собой. На основе активной конфигурации строится и работает весь кластер развернутой системы «R».\nhttps://dev01.oktell.ru/docs/r/develop/entities/master/configuration.html",
     "properties": {
         "$schema": {
-            "description": "Техническое поле*",
+            "description": "Техническое поле",
             "type": "string"
         },
         "content": {

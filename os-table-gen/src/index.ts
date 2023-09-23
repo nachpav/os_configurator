@@ -1,6 +1,5 @@
-import { table } from "console"
-import { IOSConfig, IOSConfigSite } from "./osconfig/interfaces_os-config"
-import { TypeRoleGroup, roleGroups } from "./osconfig/osconfig-group.js"
+import { IOSConfig, IOSConfigSite } from "../../os-json-schema/src/interfaces_os-config"
+import { TypeRoleGroup, roleGroups } from "../../os-json-schema/src/osconfig-group.js"
 
 const COLUMNS_COUNT = 5
 const CSS_SITE_CLASS = 'os-table-caption-site'
@@ -262,7 +261,7 @@ export const renderTable = (jsonStr: string) => {
  * Выводит всплывающее сообщение 
  */
 const showMsg = (() => {
-  let msg_timerId: NodeJS.Timeout
+  let msg_timerId: number
   const SHOWED_ATTR = 'showed'
 
   return (text: string, ms = 2000) => {
