@@ -230,6 +230,6 @@ export interface IOSConfigRoleSg extends IOSConfigRoleBasic {
    *```
    * default: empty
    */
-  substitute_domains?: { key: string, value: string }[]
+  substitute_domains?: { addr: string, domain: string }[]
 
 }

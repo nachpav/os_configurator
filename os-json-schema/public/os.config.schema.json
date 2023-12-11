@@ -2165,16 +2165,16 @@
                                         "items": {
                                             "additionalProperties": false,
                                             "properties": {
-                                                "key": {
+                                                "addr": {
                                                     "type": "string"
                                                 },
-                                                "value": {
+                                                "domain": {
                                                     "type": "string"
                                                 }
                                             },
                                             "required": [
-                                                "key",
-                                                "value"
+                                                "addr",
+                                                "domain"
                                             ],
                                             "type": "object"
                                         },
