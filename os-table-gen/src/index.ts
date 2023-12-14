@@ -32,6 +32,15 @@ const createContext = (config: IOSConfig) => {
     return content.servers.find(server => server.name == serverName)
   }
 
+  const getDomainsAliasBySite = (siteName: string) => {
+    return content.sites.find(item => item.name == siteName)?.domains ?? []
+  }
+
+  const getDomainsBySite = (siteName: string) => {
+    const domainAliases = getDomainsAliasBySite(siteName)
+    return domainAliases.map(item => content.domains.find(domain => domain.name == item))
+  }
+
   const getLostRoles = () => {
     const allRolesStruct = config.content.structure.map(struct => [...struct.servers.map(srv => srv.roles).flat()]).flat() as unknown as string[]
     return config.content.roles.filter(role => !allRolesStruct.includes(role.name))
@@ -56,6 +65,7 @@ const createContext = (config: IOSConfig) => {
     getServerRolesByName,
     getRoleByName,
     getServerByName,
+    getDomainsBySite,
     getLostRoles,
     getEmptyRoles
   }
@@ -183,6 +193,26 @@ const renderServerInfo = (context: TypeContext) => {
   }).flat()
 }
 
+/**
+ * Выводит основую информацию по доментам 
+ * @param context контекст 
+ * @returns 
+ */
+const renderDomainInfo = (context: TypeContext) => {
+  return context.sitesWithSrv.map(siteSrv => {
+    const cell = document.createElement('td') as HTMLTableCellElement
+    cell.colSpan = COLUMNS_COUNT
+    cell.classList.add(CSS_SERVER_INFO)
+    const domains = context.getDomainsBySite(siteSrv.siteName)
+    cell.innerHTML =      
+        domains.map(item=> `${item?.name??'?'} - ${item?.fqdn?? '?'}`)
+      .join('<br/>')
+
+    cell.title = JSON.stringify(domains, null, 2)
+    return cell
+  }).flat()
+}
+
 
 /**
  * Выводит список ролей которые описаны ноне добавлены к серверу
@@ -248,6 +278,8 @@ export const renderTable = (jsonStr: string) => {
   table.tBodies[0].append(...renederBodyGroup(context, "add"))
   table.tBodies[0].append(...renederBodyGroup(context))
 
+  const tableRowDomainInfo = table.insertRow()
+  tableRowDomainInfo.append(...renderDomainInfo(context))
   const tableRowServerInfo = table.insertRow()
   tableRowServerInfo.append(...renderServerInfo(context))
 
