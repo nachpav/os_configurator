@@ -22,6 +22,9 @@
 
         Роли без описания:
         <div id="targetEmptyRoles"></div>
+
+        Сервера без сайта:
+        <div id="targetLostServers"></div>
       </div>
 
       <div class="source">
@@ -29,7 +32,7 @@
       </div>
     </main>
     <script type="module">
-      import { renderTable, renderLost, renderEmpty } from '../dist/os-table-gen/src/index.js'
+      import { renderTable, renderLostRoles, renderLostServers, renderEmpty } from '../dist/os-table-gen/src/index.js'
 
       const textArea = document.getElementById('sourceJSON')
       const fetchPromise = fetch('./config.json')
@@ -41,11 +44,15 @@
         const table = renderTable(data)
         document.getElementById('targetTableContainer').append(table)
 
-        const divLostRoles = renderLost(data)
+        const divLostRoles = renderLostRoles(data)
         document.getElementById('targetLostRoles').append(divLostRoles)
 
         const divEmptyRoles = renderEmpty(data)
         document.getElementById('targetEmptyRoles').append(divEmptyRoles)
+
+        const divLostServers = renderLostServers(data)
+        document.getElementById('targetLostServers').append(divLostServers)
+        
       })
     </script>
 

@@ -46,6 +46,13 @@ const createContext = (config: IOSConfig) => {
     return config.content.roles.filter(role => !allRolesStruct.includes(role.name))
   }
 
+  const getLostServers = () => {
+    const allServers = config.content.servers
+    const siteServers = config.content.structure.map(site => site.servers.map(srv => srv.server)).flat() as string[]
+
+    return allServers.filter(server => !siteServers.includes(server.name))
+  }
+
   //Роли которые в структуре есть, но в описании нет
   const getEmptyRoles = () => {
     const allRolesStruct = config.content.structure.map(struct => [...struct.servers.map(srv => srv.roles).flat()]).flat() as unknown as string[]
@@ -67,6 +74,7 @@ const createContext = (config: IOSConfig) => {
     getServerByName,
     getDomainsBySite,
     getLostRoles,
+    getLostServers,
     getEmptyRoles
   }
 }
@@ -204,9 +212,9 @@ const renderDomainInfo = (context: TypeContext) => {
     cell.colSpan = COLUMNS_COUNT
     cell.classList.add(CSS_SERVER_INFO)
     const domains = context.getDomainsBySite(siteSrv.siteName)
-    cell.innerHTML =      
-        domains.map(item=> `${item?.name??'?'} - ${item?.fqdn?? '?'}`)
-      .join('<br/>')
+    cell.innerHTML =
+      domains.map(item => `${item?.name ?? '?'} - ${item?.fqdn ?? '?'}`)
+        .join('<br/>')
 
     cell.title = JSON.stringify(domains, null, 2)
     return cell
@@ -219,7 +227,7 @@ const renderDomainInfo = (context: TypeContext) => {
  * @param jsonStr конфиг
  * @returns 
  */
-export const renderLost = (jsonStr: string) => {
+export const renderLostRoles = (jsonStr: string) => {
   const config = JSON.parse(jsonStr) as IOSConfig
 
   const context: TypeContext = createContext(config)
@@ -242,6 +250,23 @@ export const renderEmpty = (jsonStr: string) => {
 
   const div = document.createElement('div')
   const items = context.getEmptyRoles()
+  div.innerText = `Всего:${items.length}, - ` + items.join(', ')
+  return div
+}
+
+
+/**
+ * Выводит список серверов которые описаны но не добавлены на сайт
+ * @param jsonStr конфиг
+ * @returns 
+ */
+export const renderLostServers = (jsonStr: string) => {
+  const config = JSON.parse(jsonStr) as IOSConfig
+
+  const context: TypeContext = createContext(config)
+
+  const div = document.createElement('div')
+  const items = context.getLostServers().map(server => server.name)
   div.innerText = `Всего:${items.length}, - ` + items.join(', ')
   return div
 }
