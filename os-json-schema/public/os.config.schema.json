@@ -812,21 +812,24 @@
                                         "type": "boolean"
                                     },
                                     "sipalg": {
-                                        "additionalProperties": false,
                                         "description": "```\n Маппинги SIP ALG для применения в SDP и заголовках на исходящих запросах INVITE и ответах OK, а также обратно на входящих\n сообщениях ACK и BYE.\n Формат:\n {\"key\":\"IpAddr1\", \"value\":\"IpAddr2\"}\n Ключом выступает IP-адрес подлежащий подмене, а значением - IP-адрес, на который будет подменяться адрес в исходящем SDP.\n IP-адрес подлежащий подмене должен совпадать с адресом на сервере с функциональной ролью MG/BGMG.\n IP-адрес на который будет подменяться может быть любым и обычно не принадлежит серверу. \n```\n default: empty",
-                                        "properties": {
-                                            "key": {
-                                                "type": "string"
+                                        "items": {
+                                            "additionalProperties": false,
+                                            "properties": {
+                                                "key": {
+                                                    "type": "string"
+                                                },
+                                                "value": {
+                                                    "type": "string"
+                                                }
                                             },
-                                            "value": {
-                                                "type": "string"
-                                            }
+                                            "required": [
+                                                "key",
+                                                "value"
+                                            ],
+                                            "type": "object"
                                         },
-                                        "required": [
-                                            "key",
-                                            "value"
-                                        ],
-                                        "type": "object"
+                                        "type": "array"
                                     },
                                     "stunserver": {
                                         "description": "```\n Список внешних STUN-серверов для определения внешнего IP-адреса сервера при работе за NAT.\n Применяется в одном из алгоритмов поиска учетной записи провайдера при получении INVITE-запросов извне, допуская указание в качестве домена в заголовке \"To\" внешнего адреса NAT. \n```\n default: empty",

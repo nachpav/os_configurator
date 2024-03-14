@@ -179,7 +179,7 @@ export interface IOSConfigRoleEsg extends IOSConfigRoleBasic {
    *```
    * default: empty
    */
-  sipalg?: { "key": string, "value": string }
+  sipalg?: { "key": string, "value": string }[]
 
   /** 
    *```
