@@ -17,14 +17,20 @@
       </div>
 
       <div class="target-add">
-        Роли описанные но не примененные к серверу:
-        <div id="targetLostRoles"></div>
+        <div>
 
-        Роли без описания:
-        <div id="targetEmptyRoles"></div>
+          Роли описанные но не примененные к серверу:
+          <div id="targetLostRoles" class="pb-sm"></div>
 
-        Сервера без сайта:
-        <div id="targetLostServers"></div>
+          Роли без описания:
+          <div id="targetEmptyRoles" class="pb-sm"></div>
+
+          Сервера без сайта:
+          <div id="targetLostServers" class="pb-sm"></div>
+          
+          Пересечение roleId:
+          <div id="targetIntersectionRoleId" class="pb-sm"></div>
+       </div>
       </div>
 
       <div class="source">
@@ -32,7 +38,7 @@
       </div>
     </main>
     <script type="module">
-      import { renderTable, renderLostRoles, renderLostServers, renderEmpty } from '../dist/os-table-gen/src/index.js'
+      import { renderTable, renderLostRoles, renderLostServers, renderEmpty , renderIntersectionRoleId} from '../dist/os-table-gen/src/index.js'
 
       const textArea = document.getElementById('sourceJSON')
       const fetchPromise = fetch('./config.json')
@@ -53,10 +59,17 @@
         const divLostServers = renderLostServers(data)
         document.getElementById('targetLostServers').append(divLostServers)
         
+        const divIntersectionRoleId = renderIntersectionRoleId(data)
+        document.getElementById('targetIntersectionRoleId').append(divIntersectionRoleId)
+        
       })
     </script>
 
     <style>
+      .pb-sm {
+        padding-bottom: 5px;
+      }
+
       * {
         box-sizing: border-box;
       }
@@ -174,6 +187,12 @@
       }
       #popup-msg[showed] {
         display: block;
+      }
+
+      .target-add>div{
+        display: inline-block;
+        position: sticky;
+        left: 0;
       }
     </style>
   </body>

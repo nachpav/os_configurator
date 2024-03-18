@@ -53,6 +53,20 @@ const createContext = (config: IOSConfig) => {
     return allServers.filter(server => !siteServers.includes(server.name))
   }
 
+  /** Возвращает список ролей у которых есть пересечение по roleid */
+  const getIntersectionedRoles = () => {
+    const allRoles = config.content.roles
+    const getRoleId = (obj: object) => 'roleid' in obj ? obj.roleid : undefined;
+
+    const intersectedRoles = allRoles.filter((obj, index, arr) => {
+      const currentRoleId = getRoleId(obj)
+      if(!currentRoleId){return false}
+      return arr.filter((innerObj) => currentRoleId == getRoleId(innerObj)).length > 1;
+    });
+
+    return intersectedRoles
+  }
+
   //Роли которые в структуре есть, но в описании нет
   const getEmptyRoles = () => {
     const allRolesStruct = config.content.structure.map(struct => [...struct.servers.map(srv => srv.roles).flat()]).flat() as unknown as string[]
@@ -75,6 +89,7 @@ const createContext = (config: IOSConfig) => {
     getDomainsBySite,
     getLostRoles,
     getLostServers,
+    getIntersectionedRoles,
     getEmptyRoles
   }
 }
@@ -267,6 +282,22 @@ export const renderLostServers = (jsonStr: string) => {
 
   const div = document.createElement('div')
   const items = context.getLostServers().map(server => server.name)
+  div.innerText = `Всего:${items.length}, - ` + items.join(', ')
+  return div
+}
+
+/**
+ * Выводит список серверов которые описаны но не добавлены на сайт
+ * @param jsonStr конфиг
+ * @returns 
+ */
+export const renderIntersectionRoleId = (jsonStr: string) => {
+  const config = JSON.parse(jsonStr) as IOSConfig
+
+  const context: TypeContext = createContext(config)
+
+  const div = document.createElement('div')
+  const items = context.getIntersectionedRoles().map(roles => roles.name)
   div.innerText = `Всего:${items.length}, - ` + items.join(', ')
   return div
 }
