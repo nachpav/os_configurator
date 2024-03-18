@@ -60,7 +60,7 @@ const createContext = (config: IOSConfig) => {
 
     const intersectedRoles = allRoles.filter((obj, index, arr) => {
       const currentRoleId = getRoleId(obj)
-      if(!currentRoleId){return false}
+      if (!currentRoleId) { return false }
       return arr.filter((innerObj) => currentRoleId == getRoleId(innerObj)).length > 1;
     });
 
@@ -78,6 +78,13 @@ const createContext = (config: IOSConfig) => {
   const sitesWithSrv = sites.map(site => {
     return (getServersBySite(site.name) ?? []).sort().map(server => ({ siteName: site.name, srvName: server.server }))
   }).flat()
+    .map((siteSrv, i, arr) => {
+      return {
+        ...siteSrv,
+        /**Указывает что был сделан преход на следующий сайт */
+        isBorderLeft: siteSrv.siteName != arr[i - 1]?.siteName,
+      }
+    })
 
   return {
     config,
@@ -96,12 +103,21 @@ const createContext = (config: IOSConfig) => {
 
 type TypeContext = ReturnType<typeof createContext>
 
+/** Применяем стиль для отметки следующего сайта */
+const applySiteBorderLeft = (cell: HTMLTableCellElement, isBorderneed: boolean) => {
+  if (isBorderneed) {
+    cell.classList.add('site-border-left')
+  }
+  return cell
+}
+
 const renederSites = (context: TypeContext) => {
   return context.sitesWithSrv.map(siteSrv => {
     const cell = document.createElement('td') as HTMLTableCellElement
     cell.colSpan = COLUMNS_COUNT
     cell.classList.add(CSS_SITE_CLASS)
     cell.textContent = siteSrv.siteName + "-" + siteSrv.srvName
+    applySiteBorderLeft(cell, siteSrv.isBorderLeft)
     return cell
   })
 }
@@ -110,12 +126,14 @@ const headers = ['Role', 'Group', 'Order', 'RoleID', 'MGC_gr']
 
 const renederHeader1 = (context: TypeContext) => {
   return context.sitesWithSrv.map(siteSrv => {
-    return headers.map((header) => {
+    return headers.map((header, i) => {
       const cell = document.createElement('td') as HTMLTableCellElement
       cell.classList.add(CSS_HEADER_CLASS)
       cell.textContent = header
+      if (i == 0) { applySiteBorderLeft(cell, siteSrv.isBorderLeft) }
       return cell
     })
+
   }).flat()
 }
 
@@ -151,11 +169,12 @@ const renederBodyGroup = (context: TypeContext, group?: TypeRoleGroup) => {
 
     row.title = !group ? 'Роли без группы' : ''
 
-    serverRoles.forEach(roles => {
+    serverRoles.forEach(item => {
       const cellHeader = row.insertCell()
       cellHeader.colSpan = COLUMNS_COUNT
       cellHeader.classList.add(CSS_HEADER_MID_CLASS)
-      cellHeader.innerText = (gg ? gg.caption : 'Иное') + ' - ' + roles.siteSrv.srvName
+      cellHeader.innerText = (gg ? gg.caption : 'Иное') + ' - ' + item.siteSrv.srvName
+      applySiteBorderLeft(cellHeader, item.siteSrv.isBorderLeft)
     })
     return row
   })()
@@ -170,6 +189,8 @@ const renederBodyGroup = (context: TypeContext, group?: TypeRoleGroup) => {
       cell1.classList.add(CSS_BODY_CLASS)
       cell1.innerHTML = rr ? rr.name : '&nbsp;'
       cell1.title = JSON.stringify(rr, null, 2)
+      applySiteBorderLeft(cell1, roles.siteSrv.isBorderLeft)
+
 
       const cell2 = row.insertCell()
       cell2.classList.add(CSS_BODY_CLASS)
@@ -212,6 +233,7 @@ const renderServerInfo = (context: TypeContext) => {
       ].join('<br/>')
 
     cell.title = JSON.stringify(server, null, 2)
+    applySiteBorderLeft(cell, siteSrv.isBorderLeft)
     return cell
   }).flat()
 }
@@ -232,6 +254,7 @@ const renderDomainInfo = (context: TypeContext) => {
         .join('<br/>')
 
     cell.title = JSON.stringify(domains, null, 2)
+    applySiteBorderLeft(cell, siteSrv.isBorderLeft)
     return cell
   }).flat()
 }
