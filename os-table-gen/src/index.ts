@@ -111,12 +111,12 @@ export const createContext = (config: IOSConfig) => {
   }
 
   /** Возвращает первые 6 чисел от 0 которых нет в allNumbers и ещё дает следующий номер за максимальным */
-  const getNextNumberHelper = (allNumbers: number[], max: number = 7): { innerIds: number[], maxId: number } => {
+  const getNextNumberHelper = (allNumbers: number[], max: number = 7, leftConstraints: number = 0): { innerIds: number[], maxId: number } => {
     const allNumbersSorted = allNumbers.sort((a, b) => a - b)
 
     const innerIds: number[] = (() => {
       const result: number[] = []
-      for (let i = 0; i < allNumbersSorted[allNumbersSorted.length - 1]; i++) {
+      for (let i = leftConstraints; i < allNumbersSorted[allNumbersSorted.length - 1]; i++) {
         if (result.length > max) { break }
         if (!allNumbersSorted.includes(i)) { result.push(i) }
       }
@@ -126,16 +126,16 @@ export const createContext = (config: IOSConfig) => {
   }
 
   /** RoleId Возвращает список свободных номеров и один номер следующий за максимальным */
-  const getNextRoleId = (): { innerIds: number[], nextId: number } => {
+  const getNextRoleId = (roleIdLeft: number = 0): { innerIds: number[], nextId: number } => {
     const allNumbers = config.content.roles.map(item => 'roleid' in item && item.roleid).filter(item => item !== false) as number[]
-    const result = getNextNumberHelper(allNumbers)
+    const result = getNextNumberHelper(allNumbers, undefined, roleIdLeft)
     return { innerIds: result.innerIds, nextId: result.maxId + 1 }
   }
 
   /** Group Возвращает список свободных номеров и один номер следующий за максимальным (Плюс ещё добавочно даем список кратный 10) */
-  const getNextGroup = (): { innerIds: number[], nextId: number } => {
+  const getNextGroup = (groupIdLeftNumber: number = 0): { innerIds: number[], nextId: number } => {
     const allNumbers = config.content.roles.map(item => 'group' in item && item.group).filter(item => item !== false) as number[]
-    const result = getNextNumberHelper(allNumbers, 10 )
+    const result = getNextNumberHelper(allNumbers, 10, groupIdLeftNumber)
     return { innerIds: result.innerIds, nextId: result.maxId + 1 }
   }
 
@@ -396,8 +396,13 @@ export const renderIntersectionGroup = (context: TypeContext) => {
  * @returns 
  */
 export const renderNextRoleId = (context: TypeContext) => {
+  // @ts-ignore
+  const params = (new URL(document.location)).searchParams;
+  const roleIdLeft = Number(params.get("minroleid"))
+  const roleIdLeftNumber = isNaN(roleIdLeft) ? 0 : roleIdLeft
+
   const span = document.createElement('span')
-  const item = context.getNextRoleId()
+  const item = context.getNextRoleId(roleIdLeftNumber)
   span.innerText = ` [ ${item.innerIds.join(' , ')} , ... , ${item.nextId} ]`
   return span
 }
@@ -409,8 +414,13 @@ export const renderNextRoleId = (context: TypeContext) => {
  * @returns 
  */
 export const renderNextGroup = (context: TypeContext) => {
+  // @ts-ignore
+  const params = (new URL(document.location)).searchParams;
+  const groupIdLeft = Number(params.get("mingroupid"))
+  const groupIdLeftNumber = isNaN(groupIdLeft) ? 0 : groupIdLeft
+
   const span = document.createElement('span')
-  const item = context.getNextGroup()
+  const item = context.getNextGroup(groupIdLeftNumber)
   span.innerText = ` [ ${item.innerIds.join(' , ')} , ... , ${item.nextId} ]`
   return span
 }
