@@ -19,6 +19,11 @@
       <div class="target-add">
         <div>
 
+          <div class="pb-sm pl-lg" title="Подсказка: выводит номера id которые ещё не заняты в конфиге">
+            Следующие RoleId: <span id="targetNextRoleId">-</span> <br>
+            Следующие Group: <span id="targetNextGroup">-</span>
+          </div>
+
           Роли описанные но не примененные к серверу:
           <div id="targetLostRoles" class="pb-sm"></div>
 
@@ -33,6 +38,8 @@
         
           Пересечение group на разных сайтах или typerole:
           <div id="targetIntersectionGroup" class="pb-sm"></div>
+
+        
        </div>
       </div>
 
@@ -41,7 +48,12 @@
       </div>
     </main>
     <script type="module">
-      import { renderTable, renderLostRoles, renderLostServers, renderEmpty , renderIntersectionRoleId, renderIntersectionGroup} from '../dist/os-table-gen/src/index.js'
+      import { 
+        renderTable, 
+        renderLostRoles, renderLostServers, renderEmpty, 
+        renderIntersectionRoleId, renderIntersectionGroup, 
+        renderNextRoleId, renderNextGroup
+      } from '../dist/os-table-gen/src/index.js'
 
       const textArea = document.getElementById('sourceJSON')
       const fetchPromise = fetch('./config.json')
@@ -68,12 +80,21 @@
         const divIntersectionGroup = renderIntersectionGroup(data)
         document.getElementById('targetIntersectionGroup').append(divIntersectionGroup)
         
+        const spanNextRoleId = renderNextRoleId(data)
+        document.getElementById('targetNextRoleId').append(spanNextRoleId)
+        
+        const spanNextGroup = renderNextGroup(data)
+        document.getElementById('targetNextGroup').append(spanNextGroup)
+        
       })
     </script>
 
     <style>
       .pb-sm {
         padding-bottom: 5px;
+      }
+      .pl-lg {
+        padding-left: 20px;
       }
 
       * {

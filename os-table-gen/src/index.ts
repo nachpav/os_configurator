@@ -84,7 +84,7 @@ const createContext = (config: IOSConfig) => {
     const allRoles = config.content.roles
     const getGroupId = (obj: IOSConfigRole) => 'group' in obj ? obj.group : undefined;
 
-    
+
     const intersectedRoles = allRoles
       .map(role => ({ role, roletype: role.roletype, group: getGroupId(role), rolePath: getRolePath(role.name) }))
       .filter(item => item.rolePath)
@@ -110,10 +110,43 @@ const createContext = (config: IOSConfig) => {
     return allRolesStruct.filter(roleStruct => !allRoles.includes(roleStruct))
   }
 
+  /** Возвращает первые 6 чисел от 0 которых нет в allNumbers и ещё дает следующий номер за максимальным */
+  const getNextNumberHelper = (allNumbers: number[], max: number = 7, step: number = 1): { innerIds: number[], maxId: number } => {
+    const allNumbersSorted = allNumbers.sort((a, b) => a - b)
+
+    const innerIds: number[] = (() => {
+      const result: number[] = []
+      for (let i = 0; i < allNumbersSorted[allNumbersSorted.length - 1]; i = i + step) {
+        if (result.length > max) { break }
+        if (!allNumbersSorted.includes(i)) { result.push(i) }
+      }
+      return result
+    })()
+    return { innerIds, maxId: allNumbersSorted[allNumbersSorted.length - 1] + 1 }
+  }
+
+  /** RoleId Возвращает список свободных номеров и один номер следующий за максимальным */
+  const getNextRoleId = (): { innerIds: number[], nextId: number } => {
+    const allNumbers = config.content.roles.map(item => 'roleid' in item && item.roleid).filter(item => item !== false) as number[]
+    const result = getNextNumberHelper(allNumbers)
+    return { innerIds: result.innerIds, nextId: result.maxId + 1 }
+  }
+
+  /** Group Возвращает список свободных номеров и один номер следующий за максимальным (Плюс ещё добавочно даем список кратный 10) */
+  const getNextGroup = (): { innerIds: number[], nextId: number } => {
+    const allNumbers = config.content.roles.map(item => 'group' in item && item.group).filter(item => item !== false) as number[]
+    const result = getNextNumberHelper(allNumbers, 10, 10)
+    return { innerIds: result.innerIds, nextId: Math.ceil((result.maxId + 1) / 10) * 10 }
+
+  }
+
+
+  //сайты с серверами и доп инфой isBorderLeft
   const sites = content.sites.sort((a, b) => a.name > b.name ? 1 : -1)
   const sitesWithSrv = sites.map(site => {
     return (getServersBySite(site.name) ?? []).sort().map(server => ({ siteName: site.name, srvName: server.server }))
-  }).flat()
+  })
+    .flat()
     .map((siteSrv, i, arr) => {
       return {
         ...siteSrv,
@@ -135,7 +168,9 @@ const createContext = (config: IOSConfig) => {
     getLostServers,
     getIntersectionedRolesId,
     getIntersectionedGroupOnDifferentSites,
-    getEmptyRoles
+    getNextRoleId,
+    getNextGroup,
+    getEmptyRoles,
   }
 }
 
@@ -178,7 +213,7 @@ const renederHeader1 = (context: TypeContext) => {
 /**Если группа не указана то выбираем роли не попавшие в группы */
 const renederBodyGroup = (context: TypeContext, group?: TypeRoleGroup) => {
   const gg = roleGroups.find(item => item.name == group)
-  console.log(gg)
+
   if (group && !gg) throw new Error('Group not found! > ' + group)
 
   const serverRoles = context.sitesWithSrv.map(siteSrv => {
@@ -196,11 +231,8 @@ const renederBodyGroup = (context: TypeContext, group?: TypeRoleGroup) => {
 
     return { siteSrv, rolesGG }
   })
-  console.log(context.sitesWithSrv)
-  console.log(serverRoles)
 
   const maxRows = [...serverRoles].sort((a, b) => a.rolesGG.length > b.rolesGG.length ? 1 : -1).reverse()[0].rolesGG.length + 1
-  console.log(maxRows)
 
   const headerRow = (() => {// добавляем заголовок 
     const row = document.createElement('tr') as HTMLTableRowElement
@@ -379,6 +411,38 @@ export const renderIntersectionGroup = (jsonStr: string) => {
   return div
 }
 
+/**
+ * Выводит списко свободных RoleId
+ * @param jsonStr конфиг
+ * @returns 
+ */
+export const renderNextRoleId = (jsonStr: string) => {
+  const config = JSON.parse(jsonStr) as IOSConfig
+
+  const context: TypeContext = createContext(config)
+
+  const span = document.createElement('span')
+  const item = context.getNextRoleId()
+  span.innerText = ` [ ${item.innerIds.join(' , ')} , ... , ${item.nextId} ]`
+  return span
+}
+
+
+/**
+ * Выводит списко свободных RoleId
+ * @param jsonStr конфиг
+ * @returns 
+ */
+export const renderNextGroup = (jsonStr: string) => {
+  const config = JSON.parse(jsonStr) as IOSConfig
+
+  const context: TypeContext = createContext(config)
+
+  const span = document.createElement('span')
+  const item = context.getNextGroup()
+  span.innerText = ` [ ${item.innerIds.join(' , ')} , ... , ${item.nextId} ]`
+  return span
+}
 
 /**
  * Основная фнукция построения таблицы
@@ -506,7 +570,6 @@ export const downloadConfigJson = () => {
 
   const dataType = 'application/json'
   const jsonText = textArea.value
-  console.log(jsonText)
   const fileName = `osconfig_${formatDate(new Date())}.json`
   const a = window.document.createElement('a');
   a.href = `data:${dataType};base64,${base64Str(jsonText)}`
