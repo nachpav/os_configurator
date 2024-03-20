@@ -111,18 +111,18 @@ export const createContext = (config: IOSConfig) => {
   }
 
   /** Возвращает первые 6 чисел от 0 которых нет в allNumbers и ещё дает следующий номер за максимальным */
-  const getNextNumberHelper = (allNumbers: number[], max: number = 7, step: number = 1): { innerIds: number[], maxId: number } => {
+  const getNextNumberHelper = (allNumbers: number[], max: number = 7): { innerIds: number[], maxId: number } => {
     const allNumbersSorted = allNumbers.sort((a, b) => a - b)
 
     const innerIds: number[] = (() => {
       const result: number[] = []
-      for (let i = 0; i < allNumbersSorted[allNumbersSorted.length - 1]; i = i + step) {
+      for (let i = 0; i < allNumbersSorted[allNumbersSorted.length - 1]; i++) {
         if (result.length > max) { break }
         if (!allNumbersSorted.includes(i)) { result.push(i) }
       }
       return result
     })()
-    return { innerIds, maxId: allNumbersSorted[allNumbersSorted.length - 1] + 1 }
+    return { innerIds, maxId: allNumbersSorted[allNumbersSorted.length - 1] }
   }
 
   /** RoleId Возвращает список свободных номеров и один номер следующий за максимальным */
@@ -135,9 +135,8 @@ export const createContext = (config: IOSConfig) => {
   /** Group Возвращает список свободных номеров и один номер следующий за максимальным (Плюс ещё добавочно даем список кратный 10) */
   const getNextGroup = (): { innerIds: number[], nextId: number } => {
     const allNumbers = config.content.roles.map(item => 'group' in item && item.group).filter(item => item !== false) as number[]
-    const result = getNextNumberHelper(allNumbers, 10, 10)
-    return { innerIds: result.innerIds, nextId: Math.ceil((result.maxId + 1) / 10) * 10 }
-
+    const result = getNextNumberHelper(allNumbers, 10 )
+    return { innerIds: result.innerIds, nextId: result.maxId + 1 }
   }
 
 
