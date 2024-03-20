@@ -13,7 +13,7 @@ const CSS_SERVER_INFO = 'os-table-server-info'
  * @param config Конфигурация
  * @returns вернет основной контекст для конфигурации
  */
-const createContext = (config: IOSConfig) => {
+export const createContext = (config: IOSConfig) => {
   const content = config.content
 
   const getServersBySite = (siteName: string) => {
@@ -335,11 +335,7 @@ const renderDomainInfo = (context: TypeContext) => {
  * @param jsonStr конфиг
  * @returns 
  */
-export const renderLostRoles = (jsonStr: string) => {
-  const config = JSON.parse(jsonStr) as IOSConfig
-
-  const context: TypeContext = createContext(config)
-
+export const renderLostRoles = (context: TypeContext) => {
   const div = document.createElement('div')
   const items = context.getLostRoles().map(role => role.name)
   div.innerText = `Всего:${items.length}, - ` + items.join(', ')
@@ -351,11 +347,7 @@ export const renderLostRoles = (jsonStr: string) => {
  * @param jsonStr кофиг
  * @returns 
  */
-export const renderEmpty = (jsonStr: string) => {
-  const config = JSON.parse(jsonStr) as IOSConfig
-
-  const context: TypeContext = createContext(config)
-
+export const renderEmpty = (context: TypeContext) => {
   const div = document.createElement('div')
   const items = context.getEmptyRoles()
   div.innerText = `Всего:${items.length}, - ` + items.join(', ')
@@ -368,11 +360,7 @@ export const renderEmpty = (jsonStr: string) => {
  * @param jsonStr конфиг
  * @returns 
  */
-export const renderLostServers = (jsonStr: string) => {
-  const config = JSON.parse(jsonStr) as IOSConfig
-
-  const context: TypeContext = createContext(config)
-
+export const renderLostServers = (context: TypeContext) => {
   const div = document.createElement('div')
   const items = context.getLostServers().map(server => server.name)
   div.innerText = `Всего:${items.length}, - ` + items.join(', ')
@@ -384,11 +372,7 @@ export const renderLostServers = (jsonStr: string) => {
  * @param jsonStr конфиг
  * @returns 
  */
-export const renderIntersectionRoleId = (jsonStr: string) => {
-  const config = JSON.parse(jsonStr) as IOSConfig
-
-  const context: TypeContext = createContext(config)
-
+export const renderIntersectionRoleId = (context: TypeContext) => {
   const div = document.createElement('div')
   const items = context.getIntersectionedRolesId().map(roles => roles.name)
   div.innerText = `Всего:${items.length}, - ` + items.join(', ')
@@ -400,11 +384,7 @@ export const renderIntersectionRoleId = (jsonStr: string) => {
  * @param jsonStr конфиг
  * @returns 
  */
-export const renderIntersectionGroup = (jsonStr: string) => {
-  const config = JSON.parse(jsonStr) as IOSConfig
-
-  const context: TypeContext = createContext(config)
-
+export const renderIntersectionGroup = (context: TypeContext) => {
   const div = document.createElement('div')
   const items = context.getIntersectionedGroupOnDifferentSites().map(item => item.role.name)
   div.innerText = `Всего:${items.length}, - ` + items.join(', ')
@@ -416,11 +396,7 @@ export const renderIntersectionGroup = (jsonStr: string) => {
  * @param jsonStr конфиг
  * @returns 
  */
-export const renderNextRoleId = (jsonStr: string) => {
-  const config = JSON.parse(jsonStr) as IOSConfig
-
-  const context: TypeContext = createContext(config)
-
+export const renderNextRoleId = (context: TypeContext) => {
   const span = document.createElement('span')
   const item = context.getNextRoleId()
   span.innerText = ` [ ${item.innerIds.join(' , ')} , ... , ${item.nextId} ]`
@@ -433,11 +409,7 @@ export const renderNextRoleId = (jsonStr: string) => {
  * @param jsonStr конфиг
  * @returns 
  */
-export const renderNextGroup = (jsonStr: string) => {
-  const config = JSON.parse(jsonStr) as IOSConfig
-
-  const context: TypeContext = createContext(config)
-
+export const renderNextGroup = (context: TypeContext) => {
   const span = document.createElement('span')
   const item = context.getNextGroup()
   span.innerText = ` [ ${item.innerIds.join(' , ')} , ... , ${item.nextId} ]`
@@ -449,13 +421,8 @@ export const renderNextGroup = (jsonStr: string) => {
  * @param jsonStr конфиг
  * @returns 
  */
-export const renderTable = (jsonStr: string) => {
-  const config = JSON.parse(jsonStr) as IOSConfig
-
-  const context: TypeContext = createContext(config)
-
+export const renderTable = (context: TypeContext) => {
   const table = document.createElement('table') as HTMLTableElement
-
 
   const tableRowSite = table.insertRow()
   tableRowSite.append(...renederSites(context))

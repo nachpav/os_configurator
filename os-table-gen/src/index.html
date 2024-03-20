@@ -49,6 +49,7 @@
     </main>
     <script type="module">
       import { 
+        createContext,
         renderTable, 
         renderLostRoles, renderLostServers, renderEmpty, 
         renderIntersectionRoleId, renderIntersectionGroup, 
@@ -62,28 +63,31 @@
 
       fetchPromise.then((data) => (textArea.value = data))
       fetchPromise.then((data) => {
-        const table = renderTable(data)
+        
+        const context = createContext(JSON.parse(data))
+        
+        const table = renderTable(context)
         document.getElementById('targetTableContainer').append(table)
 
-        const divLostRoles = renderLostRoles(data)
+        const divLostRoles = renderLostRoles(context)
         document.getElementById('targetLostRoles').append(divLostRoles)
 
-        const divEmptyRoles = renderEmpty(data)
+        const divEmptyRoles = renderEmpty(context)
         document.getElementById('targetEmptyRoles').append(divEmptyRoles)
 
-        const divLostServers = renderLostServers(data)
+        const divLostServers = renderLostServers(context)
         document.getElementById('targetLostServers').append(divLostServers)
         
-        const divIntersectionRoleId = renderIntersectionRoleId(data)
+        const divIntersectionRoleId = renderIntersectionRoleId(context)
         document.getElementById('targetIntersectionRoleId').append(divIntersectionRoleId)
 
-        const divIntersectionGroup = renderIntersectionGroup(data)
+        const divIntersectionGroup = renderIntersectionGroup(context)
         document.getElementById('targetIntersectionGroup').append(divIntersectionGroup)
         
-        const spanNextRoleId = renderNextRoleId(data)
+        const spanNextRoleId = renderNextRoleId(context)
         document.getElementById('targetNextRoleId').append(spanNextRoleId)
         
-        const spanNextGroup = renderNextGroup(data)
+        const spanNextGroup = renderNextGroup(context)
         document.getElementById('targetNextGroup').append(spanNextGroup)
         
       })
