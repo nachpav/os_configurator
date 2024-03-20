@@ -1,4 +1,4 @@
-import { IOSConfig, IOSConfigSite } from "../../os-json-schema/src/interfaces_os-config"
+import { IOSConfig, IOSConfigRole, IOSConfigSite } from "../../os-json-schema/src/interfaces_os-config"
 import { TypeRoleGroup, roleGroups } from "../../os-json-schema/src/osconfig-group.js"
 
 const COLUMNS_COUNT = 5
@@ -22,6 +22,18 @@ const createContext = (config: IOSConfig) => {
 
   const getServerRolesByName = (targetSrvName: string) => {
     return config.content.structure.map(struct => struct.servers).flat().find(server => server.server == targetSrvName)
+  }
+
+  /** Возвращает путь до роли в структуре */
+  const getRolePath = (targetRoleName: string) => {
+    for (const struct of config.content.structure) {
+      const siteName = struct.site
+      for (const server of struct.servers) {
+        const serverName = server.server
+        const findedRole = server.roles.find(roleName => roleName == targetRoleName)
+        if (findedRole) return { siteName, serverName, roleName: targetRoleName }
+      }
+    }
   }
 
   const getRoleByName = (roleName: string) => {
@@ -54,7 +66,7 @@ const createContext = (config: IOSConfig) => {
   }
 
   /** Возвращает список ролей у которых есть пересечение по roleid */
-  const getIntersectionedRoles = () => {
+  const getIntersectionedRolesId = () => {
     const allRoles = config.content.roles
     const getRoleId = (obj: object) => 'roleid' in obj ? obj.roleid : undefined;
 
@@ -63,6 +75,30 @@ const createContext = (config: IOSConfig) => {
       if (!currentRoleId) { return false }
       return arr.filter((innerObj) => currentRoleId == getRoleId(innerObj)).length > 1;
     });
+
+    return intersectedRoles
+  }
+
+  /** Возвращает список ролей у которых есть пересечение по groupid в разных сайтах и разных типах */
+  const getIntersectionedGroupOnDifferentSites = () => {
+    const allRoles = config.content.roles
+    const getGroupId = (obj: IOSConfigRole) => 'group' in obj ? obj.group : undefined;
+
+    
+    const intersectedRoles = allRoles
+      .map(role => ({ role, roletype: role.roletype, group: getGroupId(role), rolePath: getRolePath(role.name) }))
+      .filter(item => item.rolePath)
+      .filter(item => item.group)
+      .filter((currentItem, i, arr) => {
+        const equalGroupArr = arr
+          .filter(innerItem => currentItem.group == innerItem.group)//Если одинаковая группа
+        return [
+          //Пересечение на разных сайтах
+          ...equalGroupArr.filter(innerItem => currentItem.rolePath?.siteName != innerItem.rolePath?.siteName),// и разные сайты
+          //Пересечение на разных typerole
+          ...equalGroupArr.filter(innerItem => currentItem.roletype != innerItem.roletype), // и разные типы ролей
+        ].length > 0; // и нашли более одного то это нехорошее пересечение
+      });
 
     return intersectedRoles
   }
@@ -91,12 +127,14 @@ const createContext = (config: IOSConfig) => {
     sitesWithSrv,
     getServersBySite,
     getServerRolesByName,
+    getSiteForRoleName: getRolePath,
     getRoleByName,
     getServerByName,
     getDomainsBySite,
     getLostRoles,
     getLostServers,
-    getIntersectionedRoles,
+    getIntersectionedRolesId,
+    getIntersectionedGroupOnDifferentSites,
     getEmptyRoles
   }
 }
@@ -310,7 +348,7 @@ export const renderLostServers = (jsonStr: string) => {
 }
 
 /**
- * Выводит список серверов которые описаны но не добавлены на сайт
+ * Выводит список пересечений roleId
  * @param jsonStr конфиг
  * @returns 
  */
@@ -320,7 +358,23 @@ export const renderIntersectionRoleId = (jsonStr: string) => {
   const context: TypeContext = createContext(config)
 
   const div = document.createElement('div')
-  const items = context.getIntersectionedRoles().map(roles => roles.name)
+  const items = context.getIntersectionedRolesId().map(roles => roles.name)
+  div.innerText = `Всего:${items.length}, - ` + items.join(', ')
+  return div
+}
+
+/**
+ *  Выводит список пересечений groupid
+ * @param jsonStr конфиг
+ * @returns 
+ */
+export const renderIntersectionGroup = (jsonStr: string) => {
+  const config = JSON.parse(jsonStr) as IOSConfig
+
+  const context: TypeContext = createContext(config)
+
+  const div = document.createElement('div')
+  const items = context.getIntersectionedGroupOnDifferentSites().map(item => item.role.name)
   div.innerText = `Всего:${items.length}, - ` + items.join(', ')
   return div
 }

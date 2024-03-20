@@ -30,6 +30,9 @@
           
           Пересечение roleId:
           <div id="targetIntersectionRoleId" class="pb-sm"></div>
+        
+          Пересечение group на разных сайтах или typerole:
+          <div id="targetIntersectionGroup" class="pb-sm"></div>
        </div>
       </div>
 
@@ -38,7 +41,7 @@
       </div>
     </main>
     <script type="module">
-      import { renderTable, renderLostRoles, renderLostServers, renderEmpty , renderIntersectionRoleId} from '../dist/os-table-gen/src/index.js'
+      import { renderTable, renderLostRoles, renderLostServers, renderEmpty , renderIntersectionRoleId, renderIntersectionGroup} from '../dist/os-table-gen/src/index.js'
 
       const textArea = document.getElementById('sourceJSON')
       const fetchPromise = fetch('./config.json')
@@ -61,6 +64,9 @@
         
         const divIntersectionRoleId = renderIntersectionRoleId(data)
         document.getElementById('targetIntersectionRoleId').append(divIntersectionRoleId)
+
+        const divIntersectionGroup = renderIntersectionGroup(data)
+        document.getElementById('targetIntersectionGroup').append(divIntersectionGroup)
         
       })
     </script>
