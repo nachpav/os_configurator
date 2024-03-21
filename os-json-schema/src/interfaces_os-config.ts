@@ -308,7 +308,7 @@ interface IOSConfigServer {
    * 
    * default []
    */
-  recstorepath?: { [key: string]: string }[]
+  recstorepaths?: { [key: string]: string }[]
 
   /**
    * Произвольная строка, обозначающая принадлежность сервера к указанному шасси АГАТ-РТ.
