@@ -80,7 +80,7 @@ export interface IOSConfigRoleMix extends IOSConfigRoleBasic {
    *```
    * default: 1
    */
-  channels?: number
+  channels?: string
 
   /** 
    *```
