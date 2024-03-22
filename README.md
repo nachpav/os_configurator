@@ -39,16 +39,9 @@ vscode очень хорошо работает с JSON схемами.
 
 # Создание/просмотр таблицы конфига
 
-Нужно сделать клон репозитория 
-```
-git clone https://github.com/ssateam/os_configurator.git 
-```
+ - Создайте папку с конфигурационным файлом.
+ - Положите в эту папку файл `index.html` путь до файла в репозитории `https://raw.githubusercontent.com/ssateam/os_configurator/main/os-table-gen/public/index.html`
+ - запустить команду из созданной папки `npx http-server .`
+ - запустите в браузере `http://127.0.0.1:8080/`
 
-Далее перейти в папку `os-table-gen` и запустить команду `npm run live`
-
-После чего появится в браузере таблица с дефолтовым конфигом. 
-
-Вставьте свой конфиг в файл `./os-table-gen/public/config.json`
-
-Лайв сервер автоматически обновит страницу
-
+ >В созданной папке должны лежать два файла `index.html` и `config.json`

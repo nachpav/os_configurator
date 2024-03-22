@@ -12,6 +12,7 @@
         <div id="copy-to-clipboard">⎘</div>
         <div id="download-as-excel" title="Скачать в виде Excel">Excel</div>
         <div id="download-as-config-json" title="Скачать кофигурацию в виде JSON">JSON</div>
+        <div id="last-time-update" title="Время последнего обновления таблицы">-</div>
 
         <div id="targetTableContainer"></div>
       </div>
@@ -57,14 +58,39 @@
       } from '../dist/os-table-gen/src/index.js'
 
       const textArea = document.getElementById('sourceJSON')
-      const fetchPromise = fetch('./config.json')
-        .then((response) => response.text())
-        .catch((error) => console.error(error))
+      
+      let configJSON = ''
 
-      fetchPromise.then((data) => (textArea.value = data))
-      fetchPromise.then((data) => {
+      const update = async () =>{
+        const fetchText =await fetch(`./config.json?${new Date().getTime()}`)
+          .then((response) => response.text())
         
-        const context = createContext(JSON.parse(data))
+        if(configJSON == fetchText){ return }
+        
+        configJSON = fetchText
+        textArea.value = fetchText
+        
+        const context = createContext(JSON.parse(fetchText))
+        {//Очищаем старые данные
+          const clear = ()=>{
+          const elementIds = [
+              'targetTableContainer' , 'targetLostRoles' , 'targetEmptyRoles','targetLostServers' , 
+              'targetIntersectionRoleId' , 'targetIntersectionGroup', 'targetNextRoleId' ,'targetNextGroup' 
+          ]
+            elementIds.forEach(item => document.getElementById(item).innerHTML = '')
+          }
+
+          clear()
+        }
+
+        {//Устанавливаем время последнего обновления
+          const timeEl = document.getElementById('last-time-update')
+          timeEl.innerText = new Date().toISOString().substr(11, 8);
+          clearTimeout(timeEl.timeOutId )
+          timeEl.dataset['beepOn'] = 1
+          timeEl.timeOutId = setTimeout(()=>timeEl.dataset['beepOn'] = 0, 1500)
+        }
+
         
         const table = renderTable(context)
         document.getElementById('targetTableContainer').append(table)
@@ -89,8 +115,21 @@
         
         const spanNextGroup = renderNextGroup(context)
         document.getElementById('targetNextGroup').append(spanNextGroup)
-        
-      })
+      }
+      
+      let lock = false
+      const updateInterval = ()=>{
+        if(lock){return}
+        try{
+          lock = true
+          update()
+        }finally{
+          lock = false
+        }
+      }
+
+      setInterval(updateInterval, 500)
+
     </script>
 
     <style>
@@ -197,6 +236,20 @@
         z-index: 99999;
 
         cursor: pointer;
+      }
+     
+      #last-time-update{
+        position: fixed;
+        top: 0.3em;
+        right: 0.2em;
+        color: blue;
+        z-index: 99999;
+        transition: background-color 0.5s;
+      }
+      
+      #last-time-update[data-beep-on="1"]{
+        background-color: red;
+        transition: background-color 0.01s;
       }
 
       #copy-to-clipboard {
